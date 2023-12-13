@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
-import Input from "../UI/Input";
+
 import Button from "../UI/Button";
+import { Controller, useForm } from "react-hook-form";
+import RHFInput from "../UI/RHFInput";
 
 const Signin = () => {
+  const { handleSubmit, control, formState } = useForm();
+  const onSubmit = async () => {};
   return (
     <section className="py-12 bg-gray-50 sm:py-16 lg:py-20">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -32,19 +36,29 @@ const Signin = () => {
                   </Link>
                 </p>
               </div>
-              <form action="#" method="POST" className="mt-12">
+              <form onSubmit={handleSubmit(onSubmit)} className="mt-12">
                 <div className="space-y-4">
-                  <Input
-                    label="Username"
-                    type="text"
-                    name="username"
-                    placeholder="Enter username..."
+                  <RHFInput
+                    {...{
+                      control,
+                      Controller,
+                      name: "username",
+                      placeholder: "Enter username...",
+                      label: "Username",
+                      // defaultValue:'Name'
+                    }}
                   />
-                  <Input
-                    label="Password"
-                    type="password"
-                    name="password"
-                    placeholder="Enter password..."
+
+                  <RHFInput
+                    {...{
+                      control,
+                      Controller,
+                      name: "password",
+                      placeholder: "Enter password...",
+                      label: "Password",
+                      type: "password",
+                      // defaultValue:'Name'
+                    }}
                   />
 
                   <div className="relative flex items-center mt-4 justify-between">
@@ -245,12 +259,11 @@ const Signin = () => {
                       mt-8
                       text-base
                       font-bold
-                      text-gray-900
-                      bg-gray-100
+                      bg-gray-400
                       border border-transparent
                       rounded-xl
-                      hover:bg-gray-200
-                      focus:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200
+                      hover:bg-gray-300
+                      focus:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200
                       font-pj
                   "
                 role="button"

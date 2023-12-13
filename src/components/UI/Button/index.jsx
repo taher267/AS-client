@@ -14,8 +14,8 @@ const Button = ({ className = "", children, type = "button", title = "" }) => {
         title={title}
         type={type}
         className={cn(commonClasses, className, {
-          "bg-gray-500": loading,
-          "bg-gray-600": !loading,
+          // "bg-gray-500": loading,
+          // "bg-gray-600": !loading,
         })}
       >
         {children}
