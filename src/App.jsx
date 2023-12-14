@@ -1,9 +1,7 @@
-import { Route, Routes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import "./App.css";
-import Form from "./components/Form";
-import Signup from "./components/Signup";
-import Signin from "./components/Signin";
 import Nav from "./components/Nav2";
+import Routes from "./routes";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -11,13 +9,9 @@ function App() {
     <>
       <AuthProvider>
         <Nav />
-        <Routes>
-          <Route path="/" element={<Form />} />
-          <Route path="/form" element={<Form />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signin" element={<Signin />} />
-        </Routes>
+        <Routes />
       </AuthProvider>
+      <Toaster />
     </>
   );
 }

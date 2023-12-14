@@ -1,7 +1,14 @@
+import toast from "react-hot-toast";
+import axios, { axiosPrivate } from "../../api/axios";
 import React from "react";
+import localStorageState from "../../utils/auth/localStorageState";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader";
+
 const initialState = {
   user: null,
   loading: true,
+  authErr: null,
 };
 
 export const ACTIONS = {
@@ -54,41 +61,73 @@ export const AuthContext = React.createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-
+  console.log(state);
+  const navigate = useNavigate();
   const dataCheck = async () => {
     try {
       const accessToken = await manageAccessToken();
       if (accessToken) {
         dispatch({ type: ACTIONS.LOADING_START });
         const { data } = await axiosPrivate.get("users/mine", {
-          headers: { Authorization: accessToken },
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
-        dispatch({ type: ACTIONS.LOGIN, payload: data });
+        dispatch({ type: ACTIONS.LOGIN, payload: { user: data.data } });
       } else {
-        localStoreState.deleteAccessToken();
+        localStorageState.deleteAccessToken();
       }
     } catch (e) {
+      localStorageState.deleteAccessToken();////////////////////////////////////////////////REMOVE later
       console.log(e?.response?.data?.message || e.message);
     } finally {
       dispatch({ type: ACTIONS.LOADING_STOP });
     }
   };
 
-  async function manageAccessToken() {}
+  async function manageAccessToken() {
+    return localStorageState.getAccessToken();
+  }
 
+  const signupWithGoogle = async ({ access_token, id_token }) => {
+    try {
+      const { data } = await axiosPrivate.post(`auth/register-with-google`, {
+        access_token,
+        id_token,
+      });
+      const { accessToken, user } = data?.data || {};
+      if (accessToken && user) {
+        localStorageState.setAccessToken(accessToken);
+        toast.success(data.message, { duration: 2000 });
+      } else {
+        toast.error(`Something went Wrong!`, {
+          position: "bottom-center",
+          duration: 2000,
+        });
+      }
+    } catch (e) {
+      let msg = e.response?.data?.message || e.message;
+      const status = e?.response?.status;
+      if (status === 500 && msg !== "Network Error") {
+        msg = `Something going Wrong!`;
+      }
+      toast.error(msg, { position: "bottom-center", duration: 2000 });
+      navigate(`${location.pathname}`);
+      console.log(e);
+      // dispatch({ type: "", payload: e.message });
+    }
+  };
   React.useEffect(() => {
-    //   const accessToken = localStoreState.getAccessToken();
-    //   if (!state.user && accessToken) {
-    //     dataCheck();
-    //   } else {
-    //     dispatch({ type: ACTIONS.LOADING_STOP });
-    //   }
+    const accessToken = localStorageState.getAccessToken();
+    if (!state.user && accessToken) {
+      dataCheck();
+    } else {
+      dispatch({ type: ACTIONS.LOADING_STOP });
+    }
   }, []);
   const logout = async () => {};
 
   const logout2 = () => {
     try {
-      localStoreState.removeBoth();
+      localStorageState.removeBoth();
       dispatch({ type: ACTIONS.LOGIN_OUT });
       dispatch({ type: ACTIONS.LOADING_STOP });
     } catch (e) {
@@ -97,9 +136,15 @@ export const AuthProvider = ({ children }) => {
   };
   return (
     <AuthContext.Provider
-      value={{ ...state, manageAccessToken, dispatch, logout }}
+      value={{
+        ...state,
+        manageAccessToken,
+        dispatch,
+        logout,
+        signupWithGoogle,
+      }}
     >
-      {children}
+      {state?.loading ? <Loader /> : <>{children}</>}
     </AuthContext.Provider>
   );
 };
