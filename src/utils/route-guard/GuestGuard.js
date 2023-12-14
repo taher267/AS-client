@@ -15,7 +15,6 @@ import { DASHBOARD_PATH } from "../../config";
 const GuestGuard = ({ children }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
-
   useEffect(() => {
     if (user) {
       navigate(DASHBOARD_PATH, { replace: true });

@@ -4,7 +4,7 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 import { useAuth } from "../../context/AuthContext";
 import React from "react";
-import qs from "querystring";
+import Loader from "../Loader";
 
 const Signup = () => {
   const location = useLocation();
@@ -114,7 +114,7 @@ const Signup = () => {
 export default Signup;
 
 export const GoogleAuth = ({ loading }) => {
-  const { signupWithGoogle } = useAuth();
+  const { signupWithGoogle, googleLoading } = useAuth();
   const { hash, pathname } = useLocation();
   React.useEffect(() => {
     if (hash) {
@@ -123,7 +123,9 @@ export const GoogleAuth = ({ loading }) => {
       const { access_token, id_token } = Object.fromEntries(
         new URLSearchParams(str).entries()
       );
-      signupWithGoogle({ access_token, id_token });
+      if (access_token && id_token) {
+        signupWithGoogle({ access_token, id_token });
+      }
     }
   }, [hash]);
   return (
@@ -131,7 +133,7 @@ export const GoogleAuth = ({ loading }) => {
       // onClick={() => {
       //   const url = ;
       // }}
-      disabled={loading}
+      disabled={loading || googleLoading}
       className=" text-gray-600  bg-white border border-gray-300 focus:ring-gray-500 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <img
@@ -145,7 +147,8 @@ export const GoogleAuth = ({ loading }) => {
           uri: window.location.origin,
         })}
       >
-        Sign up with Google 
+        Sign up with Google {` `}
+        {(googleLoading && <Loader />) || ""}
       </Link>
     </Button>
   );

@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
+import google from "../../utils/auth";
 import Button from "../UI/Button";
 import { Controller, useForm } from "react-hook-form";
 import RHFInput from "../UI/RHFInput";
 import GoogleIcon from "../../Icons/GoogleIcon";
+import Loader from "../Loader";
+import { useAuth } from "../../context/AuthContext";
+import React from "react";
 
 const Signin = () => {
   const { handleSubmit, control, formState } = useForm();
@@ -253,8 +256,37 @@ const Signin = () => {
                   transform="matrix(-0.5547 0.83205 0.83205 0.5547 144 1)"
                 />
               </svg>
-              <Button
-                className="
+              <GoogleAuth />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Signin;
+
+export const GoogleAuth = ({ loading }) => {
+  const { signinWithGoogle, googleLoading } = useAuth();
+  const { hash, pathname } = useLocation();
+  React.useEffect(() => {
+    if (hash) {
+      // && !loading
+      const str = hash.slice(1);
+      const { access_token, id_token } = Object.fromEntries(
+        new URLSearchParams(str).entries()
+      );
+      if (access_token && id_token) {
+        signinWithGoogle({ access_token, id_token });
+      }
+    }
+  }, [hash]);
+  return (
+    <>
+      <Button
+        disabled={loading || googleLoading}
+        className="
                       px-8
                       py-4
                       mt-8
@@ -267,17 +299,19 @@ const Signin = () => {
                       focus:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200
                       font-pj
                   "
-                role="button"
-              >
-               <GoogleIcon/>
-                Sign in with Google
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        role="button"
+      >
+        <GoogleIcon />{" "}
+        <Link
+          to={google.getGoogleUrlForIdToken({
+            route: pathname,
+            uri: window.location.origin,
+          })}
+        >
+          {` `} Sign in with Google {` `}
+          {(googleLoading && <Loader />) || ""}
+        </Link>
+      </Button>
+    </>
   );
 };
-
-export default Signin;
