@@ -13,6 +13,7 @@ const Input = ({
   inputRef,
   ...rest
 }) => {
+  // console.log(rest);
   return (
     <div>
       {label ? (
@@ -33,13 +34,19 @@ const Input = ({
           type={type}
           className={cn(
             "border block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600",
-            className
+            className,
+            {
+              "border-red-500": error,
+              "placeholder-red-500": error,
+              "focus:border-red-600": error,
+              "focus:ring-red-600": error,
+            }
           )}
         />
       </div>
       {(error && (
         <p
-          className={cs("mt-1 text-sm font-medium text-red-500", errClassName)}
+          className={cn("mt-1 text-sm font-medium text-red-500", errClassName)}
         >
           {errMsg}
         </p>

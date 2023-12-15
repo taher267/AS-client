@@ -4,11 +4,28 @@ import Button from "../UI/Button";
 import React from "react";
 import BarIcon from "../../Icons/BarIcon";
 import XIcon from "../../Icons/XIcon";
+import { DEPARTMENT_PATH, ESTABLISHMENT_PATH } from "../../config";
 
 const menuList = [
   {
-    href: "/",
+    href: "/home",
     title: "Home",
+  },
+  {
+    href: "/form",
+    title: "Form",
+  },
+  {
+    href: ESTABLISHMENT_PATH,
+    title: "Establishment",
+  },
+  {
+    href: DEPARTMENT_PATH,
+    title: "Department",
+  },
+  {
+    href: "/report-permission",
+    title: "Report Permission",
   },
 ];
 
@@ -62,8 +79,9 @@ const Nav2 = () => {
               <div className=" flex justify-between items-center gap-2">
                 <Button onClick={logout}>Logout</Button>
                 <p>{user.name}</p>
+
                 <img
-                  className="w-10 h-10 rounded-full"
+                  className="w-auto h-8"
                   src={user.profilePic}
                   alt={user.name}
                 />

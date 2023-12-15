@@ -245,8 +245,8 @@ const Form = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col flex-1 xl:pl-64">
-        <div className="sticky top-0 z-10 flex flex-shrink-0 h-16 bg-white border-b border-gray-200">
+      <div className="flex flex-col flex-1 ">
+        {/* <div className="sticky top-0 z-10 flex flex-shrink-0 h-16 bg-white border-b border-gray-200">
           <div className="flex flex-1 px-4 sm:px-6 md:px-8">
             <div className="flex items-center justify-between flex-1 lg:justify-end">
               <div className="flex items-center -m-2 xl:hidden">
@@ -370,7 +370,7 @@ const Form = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <main>
           <div className="py-6">
             <div className="px-4 mx-auto sm:px-6 md:px-8">

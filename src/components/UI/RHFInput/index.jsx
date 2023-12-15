@@ -1,5 +1,7 @@
 import React from "react";
 import Input from "../Input";
+import stringToRHFRules from "./stringToRHFRules";
+import Select from "../Select";
 
 const RHFInput = ({
   type = "text",
@@ -7,6 +9,8 @@ const RHFInput = ({
   control,
   name,
   // defaultValue,
+  validation,
+  options,
   ...restProps
 }) => {
   if (!Controller || !control) {
@@ -14,6 +18,7 @@ const RHFInput = ({
       <div className="text-red-600">Please provide Controller & controll</div>
     );
   }
+  const rules = stringToRHFRules(validation);
   if (
     //["text", "email", "password", "url"]
     inputsTypes.includes(type)
@@ -23,13 +28,70 @@ const RHFInput = ({
         <Controller
           name={name}
           control={control}
-          render={({ field: { value, ref, ...field } }) => (
-            <Input
-              {...field}
-              {...{ inputRef: ref,type, ...restProps }}
-              // value={value || ""}
-            />
-          )}
+          rules={{
+            ...rules,
+          }}
+          render={({
+            field: { value, ref, ...field },
+            fieldState: { error },
+            ...rest
+          }) => {
+            return (
+              <Input
+                {...field}
+                {...{
+                  error: Boolean(error),
+                  errMsg: error?.message,
+                  inputRef: ref,
+                  type,
+                  ...(rules?.required?.value ? { required: true } : {}),
+                  ...restProps,
+                }}
+                // value={value || ""}
+              />
+            );
+          }}
+        />
+      </div>
+    );
+  } else if (type === "select") {
+    return (
+      <div>
+        <Controller
+          name={name}
+          control={control}
+          rules={{
+            ...rules,
+          }}
+          render={({
+            field: { ref, ...field },
+            fieldState: { error },
+            ...rest
+          }) => {
+            return (
+              <Select
+                options={options}
+                {...field}
+                {...{
+                  error: Boolean(error),
+                  errMsg: error?.message,
+                  inputRef: ref,
+                }}
+              />
+              // <Input
+              //   {...field}
+              //   {...{
+              //     error: Boolean(error),
+              //     errMsg: error?.message,
+              //     inputRef: ref,
+              //     type,
+              //     ...(rules?.required?.value ? { required: true } : {}),
+              //     ...restProps,
+              //   }}
+              //   // value={value || ""}
+              // />
+            );
+          }}
         />
       </div>
     );
