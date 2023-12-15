@@ -5,6 +5,7 @@ import {
   DEPARTMENT_PATH,
   ESTABLISHMENT_PATH,
   NEW_PATH,
+  REPORT_FORM_PATH,
 } from "../../../config";
 import { useAuth } from "../../../context/AuthContext";
 
@@ -47,6 +48,23 @@ const AuthLayout = () => {
           title: "New",
           Icon: <AnalyticsIcon />,
           href: `${DEPARTMENT_PATH}${NEW_PATH}`,
+        },
+      ],
+    },
+    {
+      title: "Report Form",
+      Icon: <DownAngleIcon />,
+      href: REPORT_FORM_PATH,
+      items: [
+        {
+          title: "All",
+          Icon: <AnalyticsIcon />,
+          href: REPORT_FORM_PATH,
+        },
+        {
+          title: "New",
+          Icon: <AnalyticsIcon />,
+          href: `${REPORT_FORM_PATH}${NEW_PATH}`,
         },
       ],
     },

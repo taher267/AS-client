@@ -7,6 +7,7 @@ import {
   DEPARTMENT_PATH,
   ESTABLISHMENT_PATH,
   NEW_PATH,
+  REPORT_FORM_PATH,
 } from "../config";
 import AuthGuard from "../utils/route-guard/AuthGuard";
 import Loadable from "../components/Loadable";
@@ -22,7 +23,10 @@ const Department = Loadable(lazy(() => import("../pages/Department")));
 const NewDepartment = Loadable(
   lazy(() => import("../pages/Department/NewDepartment"))
 );
-
+const ReportForm = Loadable(lazy(() => import("../pages/ReportForm")));
+const NewReportForm = Loadable(
+  lazy(() => import("../pages/ReportForm/NewReportForm"))
+);
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -62,14 +66,14 @@ const MainRoutes = {
       path: `${DEPARTMENT_PATH}${NEW_PATH}`,
       element: <NewDepartment />,
     },
-    // {
-    //   path: "/subscription",
-    //   element: <Subscription />,
-    // },
-    // {
-    //   path: "/settings",
-    //   element: <Settings />,
-    // },
+    {
+      path: REPORT_FORM_PATH,
+      element: <ReportForm />,
+    },
+    {
+      path: `${REPORT_FORM_PATH}${NEW_PATH}`,
+      element: <NewReportForm />,
+    },
     {
       path: "/",
       element: <Home />,

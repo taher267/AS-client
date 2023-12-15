@@ -2,7 +2,7 @@ export default (items) => {
   if (!items) return {};
   const rules = {};
 
-  for (const im of items.split("&")) {
+  for (const im of items.split("∂")) {
     const item = im.split(/→|←/g);
     if (item.length === 3) {
       const [k, v, m] = item;

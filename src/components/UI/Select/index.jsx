@@ -2,7 +2,7 @@ import cn from "../../../utils/cn";
 
 const Select = ({
   options = [],
-  title = "",
+  label = "",
   icon,
   error,
   errMsg,
@@ -12,14 +12,14 @@ const Select = ({
   ...rest
 }) => {
   return (
-    <div>
-      {(title && (
-        <label htmlFor="" className="block text-sm font-medium text-gray-600">
-          {title}
+    <>
+      {(label && (
+        <label htmlFor="" className="block text-sm font-bold text-gray-900">
+          {label}
         </label>
       )) ||
         ""}
-      <div className="relative mt-2">
+      <div className="relative mt-3">
         {icon && (
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
             {icon}
@@ -28,7 +28,7 @@ const Select = ({
         <select
           {...rest}
           className={cn(
-            "block w-full py-3 pr-10 border-gray-300 border rounded-lg focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm",
+            "block w-full py-3 pr-10 border-gray-300 border rounded-lg focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm mt-2",
             className,
             {
               "pl-2": !icon,
@@ -58,7 +58,7 @@ const Select = ({
         </p>
       )) ||
         ""}
-    </div>
+    </>
   );
 };
 

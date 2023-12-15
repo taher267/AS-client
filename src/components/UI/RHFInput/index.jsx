@@ -11,6 +11,9 @@ const RHFInput = ({
   // defaultValue,
   validation,
   options,
+  setGqlErrs,
+  gqlErrs,
+  className,
   ...restProps
 }) => {
   if (!Controller || !control) {
@@ -18,13 +21,13 @@ const RHFInput = ({
       <div className="text-red-600">Please provide Controller & controll</div>
     );
   }
-  const rules = stringToRHFRules(validation);
+  const rules = validation ? stringToRHFRules(validation) : {};
   if (
     //["text", "email", "password", "url"]
     inputsTypes.includes(type)
   ) {
     return (
-      <div>
+      <div className={className}>
         <Controller
           name={name}
           control={control}
@@ -56,7 +59,7 @@ const RHFInput = ({
     );
   } else if (type === "select") {
     return (
-      <div>
+      <div className={className}>
         <Controller
           name={name}
           control={control}
@@ -73,6 +76,7 @@ const RHFInput = ({
                 options={options}
                 {...field}
                 {...{
+                  ...restProps,
                   error: Boolean(error),
                   errMsg: error?.message,
                   inputRef: ref,

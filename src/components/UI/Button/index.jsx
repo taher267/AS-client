@@ -15,19 +15,17 @@ const Button = ({
     "inline-flex items-center justify-center w-full px-6 py-3 text-sm font-semibold leading-5 text-white transition-all duration-200 bg-indigo-600 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-500";
 
   return (
-    <div>
-      <button
-        title={title}
-        type={type}
-        className={cn(commonClasses, className, {
-          // "bg-gray-500": loading,
-          // "bg-gray-600": !loading,
-        })}
-        {...props}
-      >
-        {children}
-      </button>
-    </div>
+    <button
+      title={title}
+      type={type}
+      className={cn(commonClasses, className, {
+        // "bg-gray-500": loading,
+        // "bg-gray-600": !loading,
+      })}
+      {...props}
+    >
+      {children}
+    </button>
   );
 };
 

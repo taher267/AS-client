@@ -5,6 +5,7 @@ export const SIGNIN_PATH = `/signin`;
 export const ESTABLISHMENT_PATH = `/establishments`;
 export const DEPARTMENT_PATH = `/departments`;
 export const REPORT_PERMISSION_PATH = `/report-permissions`;
+export const REPORT_FORM_PATH = `/report-forms`;
 export const NEW_PATH = `/new`;
 export const UPDATE_PATH = `/UPDATE`;
 
