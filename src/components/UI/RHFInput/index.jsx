@@ -2,6 +2,7 @@ import React from "react";
 import Input from "../Input";
 import stringToRHFRules from "./stringToRHFRules";
 import Select from "../Select";
+import MultiInputList from "../MultiInputList";
 
 const RHFInput = ({
   type = "text",
@@ -13,7 +14,7 @@ const RHFInput = ({
   options,
   setGqlErrs,
   gqlErrs,
-  className,
+  // className,
   ...restProps
 }) => {
   if (!Controller || !control) {
@@ -27,77 +28,94 @@ const RHFInput = ({
     inputsTypes.includes(type)
   ) {
     return (
-      <div className={className}>
-        <Controller
-          name={name}
-          control={control}
-          rules={{
-            ...rules,
-          }}
-          render={({
-            field: { value, ref, ...field },
-            fieldState: { error },
-            ...rest
-          }) => {
-            return (
-              <Input
-                {...field}
-                {...{
-                  error: Boolean(error),
-                  errMsg: error?.message,
-                  inputRef: ref,
-                  type,
-                  ...(rules?.required?.value ? { required: true } : {}),
-                  ...restProps,
-                }}
-                // value={value || ""}
-              />
-            );
-          }}
-        />
-      </div>
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          ...rules,
+        }}
+        render={({
+          field: { value, ref, ...field },
+          fieldState: { error },
+          ...rest
+        }) => {
+          return (
+            <Input
+              {...field}
+              {...{
+                error: Boolean(error),
+                errMsg: error?.message,
+                inputRef: ref,
+                type,
+                ...(rules?.required?.value ? { required: true } : {}),
+                ...restProps,
+              }}
+              // value={value || ""}
+            />
+          );
+        }}
+      />
     );
   } else if (type === "select") {
     return (
-      <div className={className}>
-        <Controller
-          name={name}
-          control={control}
-          rules={{
-            ...rules,
-          }}
-          render={({
-            field: { ref, ...field },
-            fieldState: { error },
-            ...rest
-          }) => {
-            return (
-              <Select
-                options={options}
-                {...field}
-                {...{
-                  ...restProps,
-                  error: Boolean(error),
-                  errMsg: error?.message,
-                  inputRef: ref,
-                }}
-              />
-              // <Input
-              //   {...field}
-              //   {...{
-              //     error: Boolean(error),
-              //     errMsg: error?.message,
-              //     inputRef: ref,
-              //     type,
-              //     ...(rules?.required?.value ? { required: true } : {}),
-              //     ...restProps,
-              //   }}
-              //   // value={value || ""}
-              // />
-            );
-          }}
-        />
-      </div>
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          ...rules,
+        }}
+        render={({
+          field: { ref, ...field },
+          fieldState: { error },
+          ...rest
+        }) => {
+          return (
+            <Select
+              options={options}
+              {...field}
+              {...{
+                name,
+                ...restProps,
+                error: Boolean(error),
+                errMsg: error?.message,
+                inputRef: ref,
+              }}
+            />
+          );
+        }}
+      />
+    );
+  } else if (type === "custom_multi_select") {
+    return (
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          ...rules,
+        }}
+        render={({
+          field: { ref, onChange, value, ...field },
+          fieldState: { error },
+          ...rest
+        }) => {
+          return (
+            <MultiInputList
+              options={options}
+              {...field}
+              {...{
+                ...restProps,
+                error: Boolean(error),
+                errMsg: error?.message,
+                inputRef: ref,
+              }}
+              // onChange={(data) => {
+              //   onChange(data);
+              //   return data;
+              // }}
+            />
+          );
+        }}
+      />
     );
   }
   return (

@@ -15,7 +15,7 @@ const Input = ({
 }) => {
   // console.log(rest);
   return (
-    <>
+    <div className="w-full">
       {label ? (
         <label
           htmlFor={name}
@@ -52,7 +52,7 @@ const Input = ({
         </p>
       )) ||
         ""}
-    </>
+    </div>
   );
 };
 

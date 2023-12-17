@@ -16,7 +16,7 @@ const initFields = {
   // template: "",
   status: "",
   placeholder: "",
-  // options: [],
+  options: [],
   params: "",
   validation: "",
   // icon: "",
@@ -162,14 +162,17 @@ const NewInputField = () => {
                   {Object.keys(formItem)?.map?.((keye, j) => {
                     if (keye === "id")
                       return (
-                        <Button
-                          className=""
-                          key={keye}
-                          disabled={arrayForm?.length === 1}
-                          onClick={() => remove(keye)}
-                        >
-                          Del
-                        </Button>
+                        <div key={j}>
+                          <label className="block mb-0 sm:mb-2">&nbsp;</label>
+                          <Button
+                            className=""
+                            key={keye}
+                            disabled={arrayForm?.length === 1}
+                            onClick={() => remove(keye)}
+                          >
+                            Del
+                          </Button>
+                        </div>
                       );
 
                     return (

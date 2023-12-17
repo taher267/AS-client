@@ -5,12 +5,14 @@ import localStorageState from "../../utils/auth/localStorageState";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { DASHBOARD_PATH, HOME_PATH, SIGNIN_PATH } from "../../config";
+import { jwtDecode } from "jwt-decode";
 
 const initialState = {
   user: null,
   loading: true,
   googleLoading: false,
   authErr: null,
+  isAuthenticated: false,
 };
 
 export const ACTIONS = {
@@ -80,7 +82,10 @@ export const AuthProvider = ({ children }) => {
         const { data } = await axiosPrivate.get("users/mine", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-        dispatch({ type: ACTIONS.LOGIN, payload: { user: data.data } });
+        dispatch({
+          type: ACTIONS.LOGIN,
+          payload: { user: data.data, isAuthenticated: true },
+        });
       } else {
         localStorageState.deleteAccessToken();
       }
@@ -91,9 +96,41 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: ACTIONS.LOADING_STOP });
     }
   };
-
+  // const testRefeshToAccess = async () => {
+  //   try {
+  //     const { data } = await axiosPrivate.get("auth/refresh", {});
+  //     console.log(data);
+  //     const AT = data?.data?.accessToken;
+  //     if (AT) {
+  //       localStorageState.setAccessToken(AT);
+  //       return AT;
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   async function manageAccessToken() {
-    return localStorageState.getAccessToken();
+    try {
+      const localToken = localStorageState.getAccessToken();
+      if (localToken) {
+        const { exp } = jwtDecode(localToken);
+        if (new Date(exp * 1000).valueOf() > Date.now()) {
+          return localToken;
+        }
+
+        // RefreshToken to accessToken Start
+        const { data } = await axiosPrivate.get("auth/refresh", {});
+        const AT = data?.data?.accessToken;
+        if (AT) {
+          localStorageState.setAccessToken(AT);
+          return AT;
+        }
+        // RefreshToken to accessToken End
+      }
+      console.log("no token");
+    } catch (e) {
+      console.log(e);
+    }
   }
   // Google Signup
   const signupWithGoogle = async ({ access_token, id_token }) => {
@@ -106,7 +143,10 @@ export const AuthProvider = ({ children }) => {
       const { accessToken, user } = data?.data || {};
       if (accessToken && user) {
         localStorageState.setAccessToken(accessToken);
-        dispatch({ type: ACTIONS.LOGIN, payload: { user } });
+        dispatch({
+          type: ACTIONS.LOGIN,
+          payload: { user, isAuthenticated: true },
+        });
         toast.success(data.message, { duration: 2000 });
       } else {
         toast.error(`Something went Wrong!`, {
@@ -140,7 +180,10 @@ export const AuthProvider = ({ children }) => {
       const { accessToken, user } = data?.data || {};
       if (accessToken && user) {
         localStorageState.setAccessToken(accessToken);
-        dispatch({ type: ACTIONS.LOGIN, payload: { user } });
+        dispatch({
+          type: ACTIONS.LOGIN,
+          payload: { user, isAuthenticated: true },
+        });
         toast.success(data.message, { duration: 2000 });
       } else {
         toast.error(`Something went Wrong!`, {
@@ -163,26 +206,31 @@ export const AuthProvider = ({ children }) => {
       // dispatch({ type: "", payload: e.message });
     }
   };
+
   React.useEffect(() => {
-    const accessToken = localStorageState.getAccessToken();
-    if (!state.user && accessToken) {
-      dataCheck();
-    } else if (state.loading) {
-      dispatch({ type: ACTIONS.LOADING_STOP });
+    if (!state.isAuthenticated) {
+      manageAccessToken()
+        .then(() => {
+          dataCheck();
+        })
+        .catch((e) => {
+          console.log(e);
+          if (state.loading) {
+            dispatch({ type: ACTIONS.LOADING_STOP });
+          }
+        });
     }
-  }, [state.user]);
+  }, [state.isAuthenticated]);
+
   const logout = async () => {
     try {
       dispatch({ type: ACTIONS.GOOGLE_LOADING, payload: true });
       const { data } = await axiosPrivate.delete(`auth/logout`);
-      toast.error(data.message, {
+      toast.success(data.message, {
         position: "bottom-center",
         duration: 2000,
       });
     } catch (e) {
-      // let msg = e.response?.data?.message || e.message;
-      // const status = e?.response?.status;
-
       console.log(e);
     } finally {
       dispatch({ type: ACTIONS.LOGIN_OUT });
@@ -209,6 +257,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         signupWithGoogle,
         signinWithGoogle,
+        // testRefeshToAccess,
       }}
     >
       {state?.loading ? (

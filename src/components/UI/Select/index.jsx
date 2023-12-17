@@ -12,7 +12,7 @@ const Select = ({
   ...rest
 }) => {
   return (
-    <>
+    <div className="w-full">
       {(label && (
         <label htmlFor="" className="block text-sm font-bold text-gray-900">
           {label}
@@ -58,7 +58,7 @@ const Select = ({
         </p>
       )) ||
         ""}
-    </>
+    </div>
   );
 };
 
