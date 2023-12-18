@@ -1,16 +1,39 @@
 import { useForm, Controller } from "react-hook-form";
 import Button from "../../../components/UI/Button";
 import RHFInput from "../../../components/UI/RHFInput";
+import React from "react";
+import { useAuth } from "../../../context/AuthContext";
+import toast from "react-hot-toast";
+import { axiosPrivate } from "../../../api/axios";
 
 const NewEstablishment = () => {
   const { handleSubmit, control } = useForm();
-  const onSubmit = async (data) => {
+  const { manageAccessToken } = useAuth();
+  const [controller] = React.useState(new AbortController());
+
+  React.useEffect(() => {
+    return () => {
+      // controller?.abort?.();
+    };
+  }, []);
+
+  const onSubmit = async (formData) => {
     try {
-      console.log(data);
-    } catch (e) {
-      console.log();
+      const signal = controller?.signal;
+      const accessToken = await manageAccessToken();
+      const { data } = await axiosPrivate.post(`establishments`, formData, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        // signal,
+      });
+      toast.success(data.message);
+      console.log(data, "===================establisthment");
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message;
+      toast.error(msg);
+      console.log(err);
     }
   };
+
   return (
     <div>
       <div className="flex flex-col flex-1 ">

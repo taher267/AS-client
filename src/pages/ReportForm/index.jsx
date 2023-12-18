@@ -9,28 +9,31 @@ import Table from "../../components/Table";
 
 const ReportForm = () => {
   const { manageAccessToken } = useAuth();
+  const [allReportForm, setAllReportForms] = React.useState({});
+  
   React.useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-    // (async () => {
-    //   try {
-    //     const accessToken = await manageAccessToken();
-    //     const { data } = await axiosPrivate.get(`report-forms`, {
-    //       headers: { Authorization: `Bearer ${accessToken}` },
-    //       signal,
-    //     });
-    //     console.log(data);
-    //   } catch (err) {
-    //     const msg = err.response?.data?.message || err.message;
-    //     toast.error(msg);
-    //     console.log(err);
-    //   }
-    // })();
+    (async () => {
+      try {
+        const accessToken = await manageAccessToken();
+        const { data } = await axiosPrivate.get(`report-forms`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          signal,
+        });
+        setAllReportForms(data);
+      } catch (err) {
+        const msg = err.response?.data?.message || err.message;
+        toast.error(msg);
+        console.log(err);
+      }
+    })();
     return () => {
       // Cancel the request when the component unmounts
       controller.abort();
     };
   }, []);
+
   return (
     <div>
       <div className="flex flex-col flex-1 ">
@@ -46,15 +49,18 @@ const ReportForm = () => {
                   Lorem ipsum dolor sit amet, consectetur adipis.
                 </p>
               </div>
-              <Table />
-              {/* <NewInputField /> */}
-              {/* <MultiInputList
-                options={["one", "two"]}
-                required
-                onChange={(values, eve) => {
-                  console.log(values);
-                }}
-              /> */}
+
+              {allReportForm?.data?.map((form) => (
+                <div
+                  key={form.id}
+                  className="flex justify-between border-b-1 border-solid border-black"
+                >
+                  <div>{form.name}</div>
+                  <div>
+                    {form.fields?.map?.(({ label }) => label).join?.("<=>")}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </main>
