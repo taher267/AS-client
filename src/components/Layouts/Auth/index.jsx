@@ -6,6 +6,7 @@ import {
   ESTABLISHMENT_PATH,
   NEW_PATH,
   REPORT_FORM_PATH,
+  USER_PATH,
 } from "../../../config";
 import { useAuth } from "../../../context/AuthContext";
 
@@ -16,6 +17,23 @@ const AuthLayout = () => {
       title: "Dashboard",
       Icon: <DownAngleIcon />,
       href: DASHBOARD_PATH,
+    },
+    {
+      title: "User",
+      Icon: <DownAngleIcon />,
+      href: USER_PATH,
+      items: [
+        {
+          title: "All",
+          Icon: <AnalyticsIcon />,
+          href: USER_PATH,
+        },
+        {
+          title: "New",
+          Icon: <AnalyticsIcon />,
+          href: `${USER_PATH}${NEW_PATH}`,
+        },
+      ],
     },
     {
       title: "Establistment",
@@ -34,6 +52,7 @@ const AuthLayout = () => {
         },
       ],
     },
+
     {
       title: "Department",
       Icon: <DownAngleIcon />,

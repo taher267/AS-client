@@ -31,6 +31,7 @@ const Input = ({
           ref={inputRef}
           {...rest}
           id={name}
+          name={name}
           type={type}
           className={cn(
             "border block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600",

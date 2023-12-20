@@ -1,16 +1,15 @@
-import { clsx } from "clsx";
 import React from "react";
-import { twMerge } from "tailwind-merge";
 import cn from "../../../utils/cn";
+import Loader from "../../Loader";
 
 const Button = ({
   className = "",
   children,
   type = "button",
   title = "",
+  loading = false,
   ...props
 }) => {
-  const [loading, setLoading] = React.useState(false);
   const commonClasses =
     "inline-flex items-center justify-center w-full px-6 py-3 text-sm font-semibold leading-5 text-white transition-all duration-200 bg-indigo-600 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -24,7 +23,13 @@ const Button = ({
       })}
       {...props}
     >
-      {children}
+      <span className="flex justify-center items-center">{children}</span> {` `}{" "}
+      {(loading && (
+        <span className="ml-2">
+          <Loader />
+        </span>
+      )) ||
+        ""}
     </button>
   );
 };

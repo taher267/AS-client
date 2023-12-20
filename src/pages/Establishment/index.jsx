@@ -7,6 +7,7 @@ import Table from "../../components/Table";
 const Establishment = () => {
   const { manageAccessToken } = useAuth();
   const [allEstablishments, setAllEstablishments] = React.useState({});
+  const [deleting, setDeleting] = React.useState(false);
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -30,6 +31,31 @@ const Establishment = () => {
       controller.abort();
     };
   }, []);
+  const deleteItem = async (id) => {
+    try {
+      setDeleting(true);
+      const accessToken = await manageAccessToken();
+      const { data } = await axiosPrivate.delete(`/establishments/${id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setAllEstablishments((p) => {
+        const copy = [...p?.data];
+        const data = copy.filter((item) => item.id !== id);
+        return {
+          ...p,
+          data,
+        };
+      });
+      toast.success(`Establishment has been deleted!`);
+    } catch (e) {
+      let msg = e?.response?.data?.message || e.message;
+      toast.error(msg, { duration: 2000 });
+      console.log(e);
+    } finally {
+      // common work
+      setDeleting(false);
+    }
+  };
   return (
     <div>
       <div className="flex flex-col flex-1 ">
@@ -47,7 +73,14 @@ const Establishment = () => {
                   Lorem ipsum dolor sit amet, consectetur adipis.
                 </p>
               </div>
-              <Table {...{ headers, dataItems: allEstablishments?.data || [] }} />
+              <Table
+                {...{
+                  headers,
+                  dataItems: allEstablishments?.data || [],
+                  deleteItem,
+                  deleting,
+                }}
+              />
             </div>
           </div>
         </main>
@@ -64,6 +97,7 @@ const headers = {
   items: [
     {
       title: "Name",
+      field: "name",
       className: "",
     },
     {

@@ -1,9 +1,9 @@
 import React from "react";
-import DepartmentForm from "../DepartmentForm";
+import DepartmentForm from "../UserForm";
 import { axiosPrivate } from "../../../api/axios";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
-const NewDepartment = () => {
+const NewUser = () => {
   const { manageAccessToken } = useAuth();
   const [limit, setLimit] = React.useState(100);
   const [loading, setLoading] = React.useState(false);
@@ -90,4 +90,4 @@ const NewDepartment = () => {
   );
 };
 
-export default NewDepartment;
+export default NewUser;

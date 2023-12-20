@@ -286,19 +286,7 @@ export const GoogleAuth = ({ loading }) => {
     <>
       <Button
         disabled={loading || googleLoading}
-        className="
-                      px-8
-                      py-4
-                      mt-8
-                      text-base
-                      font-bold
-                      bg-gray-400
-                      border border-transparent
-                      rounded-xl
-                      hover:bg-gray-300
-                      focus:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200
-                      font-pj
-                  "
+        className="px-8 py-4 mt-8 text-base font-bold bg-gray-400 border border-transparent rounded-xl hover:bg-gray-300 focus:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 font-pj"
         role="button"
       >
         <GoogleIcon />{" "}

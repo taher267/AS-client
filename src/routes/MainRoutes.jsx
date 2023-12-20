@@ -8,6 +8,7 @@ import {
   ESTABLISHMENT_PATH,
   NEW_PATH,
   REPORT_FORM_PATH,
+  USER_PATH,
 } from "../config";
 import AuthGuard from "../utils/route-guard/AuthGuard";
 import Loadable from "../components/Loadable";
@@ -15,6 +16,10 @@ import Loadable from "../components/Loadable";
 const Dashboard = Loadable(lazy(() => import("../components/Dashboard")));
 const Home = Loadable(lazy(() => import("../components/Home")));
 const Form = Loadable(lazy(() => import("../components/Form")));
+
+const User = Loadable(lazy(() => import("../pages/User")));
+const NewUser = Loadable(lazy(() => import("../pages/User/NewUser")));
+
 const Establishment = Loadable(lazy(() => import("../pages/Establishment")));
 const NewEstablishment = Loadable(
   lazy(() => import("../pages/Establishment/NewEstablishment"))
@@ -49,7 +54,14 @@ const MainRoutes = {
       path: "/home",
       element: <Home />,
     },
-
+    {
+      path: USER_PATH,
+      element: <User />,
+    },
+    {
+      path: `${USER_PATH}${NEW_PATH}/`,
+      element: <NewUser />,
+    },
     {
       path: ESTABLISHMENT_PATH,
       element: <Establishment />,

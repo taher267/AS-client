@@ -7,22 +7,27 @@ const data = {
     items: [
       {
         title: "Customer",
+        field: "customer",
         className: "",
       },
       {
         title: "Email Address",
+        field: "email_address",
         className: "",
       },
       {
         title: "Phone Number",
+        field: "phone_number",
         className: "",
       },
       {
         title: "Join Date",
+        field: "join_date",
         className: "hidden xl:table-cell",
       },
       {
         title: "Country",
+        field: "country",
         className: "",
       },
       {
@@ -36,7 +41,13 @@ const data = {
     ],
   },
 };
-const Table = ({ headers = data.headers, dataItems = [] }) => {
+const Table = ({
+  headers = data.headers,
+  dataItems = [],
+  deleteItem,
+  deleting,
+}) => {
+  console.log(dataItems);
   return (
     <div className="py-12 bg-white sm:py-16 lg:py-20">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -121,20 +132,23 @@ const Table = ({ headers = data.headers, dataItems = [] }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataItems?.map(({ id, name }) => (
-                    <tr key={id} className="bg-white">
+                  {dataItems?.map((item) => (
+                    <tr key={item.id} className="bg-white">
                       <td className="px-4 py-4 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
-                        <div>{name}</div>
+                        <div>{item[headers.items[0].title]}</div>
                         <div className="mt-1 space-y-2 font-medium pl-11 lg:hidden">
-                          {/* <div className="flex items-center">
-                            tim.jennings@example.com
-                          </div> */}
-                          {/* <div className="flex items-center">
-                            (480) 555-0103
-                          </div> */}
-                          {/* <div className="flex items-center">
-                            November 9, 2021
-                          </div> */}
+                          {headers?.items?.map?.((im, k) => {
+                            if (k !== 0 || k !== headers?.items?.length - 1) {
+                              return (
+                                <div
+                                  key={`${item.id}${im.title}`}
+                                  className="flex items-center"
+                                >
+                                  {item[im.field]}
+                                </div>
+                              );
+                            }
+                          })}
                           <div className="flex items-center pt-3 space-x-4">
                             <button
                               type="button"
@@ -143,6 +157,8 @@ const Table = ({ headers = data.headers, dataItems = [] }) => {
                               Edit Details
                             </button>
                             <button
+                              onClick={() => deleteItem?.(item.id)}
+                              disabled={deleting}
                               type="button"
                               className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
@@ -151,25 +167,21 @@ const Table = ({ headers = data.headers, dataItems = [] }) => {
                           </div>
                         </div>
                       </td>
-                      {/* <td className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
-                        <div className="flex items-center">
-                          tim.jennings@example.com
-                        </div>
-                      </td> */}
-                      {/* <td className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap">
-                        <div className="flex items-center">
-                          
-                          (480) 555-0103
-                        </div>
-                      </td> */}
-                      {/* <td className="hidden px-4 py-4 text-sm font-medium text-gray-900 xl:table-cell whitespace-nowrap">
-                        <div className="flex items-center">
-                          November 9, 2021
-                        </div>
-                      </td> */}
-                      {/* <td className="px-4 py-4 text-sm font-medium text-right text-gray-900 align-top lg:align-middle lg:text-left whitespace-nowrap">
-                        USA
-                      </td> */}
+                      {headers?.items?.map?.((im, k) => {
+                        if (k !== 0 || k !== headers?.items?.length - 1) {
+                          return (
+                            <td
+                              key={`${item.id}.${im.title}`}
+                              className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
+                            >
+                              <div className="flex items-center">
+                                {item[im.field]}
+                              </div>
+                            </td>
+                          );
+                        }
+                      })}
+
                       <td className="hidden px-4 py-4 lg:table-cell whitespace-nowrap">
                         <div className="flex items-center space-x-4">
                           <button
@@ -179,6 +191,8 @@ const Table = ({ headers = data.headers, dataItems = [] }) => {
                             Edit Details
                           </button>
                           <button
+                            onClick={() => deleteItem?.(item.id)}
+                            disabled={deleting}
                             type="button"
                             className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                           >

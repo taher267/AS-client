@@ -9,11 +9,12 @@ const RHFInput = ({
   Controller,
   control,
   name,
-  // defaultValue,
+  defaultValue = "",
   validation,
   options,
   setGqlErrs,
   gqlErrs,
+  selector = {},
   // className,
   ...restProps
 }) => {
@@ -43,6 +44,8 @@ const RHFInput = ({
             <Input
               {...field}
               {...{
+                name,
+                defaultValue,
                 error: Boolean(error),
                 errMsg: error?.message,
                 inputRef: ref,
@@ -74,11 +77,14 @@ const RHFInput = ({
               options={options}
               {...field}
               {...{
+                defaultValue,
                 name,
+                selector,
                 ...restProps,
                 error: Boolean(error),
                 errMsg: error?.message,
                 inputRef: ref,
+                required: Boolean(rules?.required?.value),
               }}
             />
           );

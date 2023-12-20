@@ -1,3 +1,4 @@
+import React from "react";
 import cn from "../../../utils/cn";
 
 const Select = ({
@@ -9,8 +10,18 @@ const Select = ({
   inputRef,
   className,
   errClassName,
+  defaultValue,
+  selector = {},
   ...rest
 }) => {
+  const [isObject, setIsObject] = React.useState(false);
+  if (isObject) {
+    return (
+      <div className="text-red-600">
+        Please provide selector(label and value)
+      </div>
+    );
+  }
   return (
     <div className="w-full">
       {(label && (
@@ -27,6 +38,7 @@ const Select = ({
         )}
         <select
           {...rest}
+          // defaultValue={defaultValue}
           className={cn(
             "block w-full py-3 pr-10 border-gray-300 border rounded-lg focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm mt-2",
             className,
@@ -41,13 +53,27 @@ const Select = ({
           )}
           ref={inputRef}
         >
-          {(options?.length && <option value="">Select an option</option>) ||
+          <option value="">Select an option</option>
+          {(!isObject &&
+            options?.map((item, i) => {
+              if (
+                typeof item === "object" &&
+                (!selector?.label || !selector.value)
+              ) {
+                setIsObject(true);
+                return;
+              }
+              return (
+                <option
+                  key={i}
+                  value={item?.[selector?.value] || item}
+                  className="capitalize"
+                >
+                  {item?.[selector?.label] || item}
+                </option>
+              );
+            })) ||
             ""}
-          {options?.map((item) => (
-            <option key={item} value={item} className="capitalize">
-              {item}
-            </option>
-          ))}
         </select>
       </div>
       {(error && (
