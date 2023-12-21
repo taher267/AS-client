@@ -6,8 +6,10 @@ import {
   DASHBOARD_PATH,
   DEPARTMENT_PATH,
   ESTABLISHMENT_PATH,
+  HOLIDAY_PATH,
   NEW_PATH,
   REPORT_FORM_PATH,
+  REPORT_PERMISSION_PATH,
   USER_PATH,
 } from "../config";
 import AuthGuard from "../utils/route-guard/AuthGuard";
@@ -31,6 +33,18 @@ const NewDepartment = Loadable(
 const ReportForm = Loadable(lazy(() => import("../pages/ReportForm")));
 const NewReportForm = Loadable(
   lazy(() => import("../pages/ReportForm/NewReportForm"))
+);
+const ReportPermission = Loadable(
+  lazy(() => import("../pages/ReportPermission"))
+);
+const NewReportPermission = Loadable(
+  lazy(() => import("../pages/ReportPermission/NewReportPermission"))
+);
+const Holiday = Loadable(
+  lazy(() => import("../pages/Holiday"))
+);
+const NewHoliday = Loadable(
+  lazy(() => import("../pages/Holiday/NewHoliday"))
 );
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -85,6 +99,22 @@ const MainRoutes = {
     {
       path: `${REPORT_FORM_PATH}${NEW_PATH}`,
       element: <NewReportForm />,
+    },
+    {
+      path: REPORT_PERMISSION_PATH,
+      element: <ReportPermission />,
+    },
+    {
+      path: `${REPORT_PERMISSION_PATH}${NEW_PATH}`,
+      element: <NewReportPermission />,
+    },
+    {
+      path: HOLIDAY_PATH,
+      element: <Holiday />,
+    },
+    {
+      path: `${HOLIDAY_PATH}${NEW_PATH}`,
+      element: <NewHoliday />,
     },
     {
       path: "/",

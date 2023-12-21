@@ -5,8 +5,10 @@ export const SIGNIN_PATH = `/signin`;
 export const USER_PATH = `/users`;
 export const ESTABLISHMENT_PATH = `/establishments`;
 export const DEPARTMENT_PATH = `/departments`;
+export const HOLIDAY_PATH = `/holidays`;
 export const REPORT_PERMISSION_PATH = `/report-permissions`;
 export const REPORT_FORM_PATH = `/report-forms`;
+// export const FORM_PERMISSION_PATH = `/forms-permissions`;
 export const NEW_PATH = `/new`;
 export const UPDATE_PATH = `/update`;
 

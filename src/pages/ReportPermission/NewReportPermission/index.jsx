@@ -1,16 +1,40 @@
 import React from "react";
-import DepartmentForm from "../UserForm";
+import DepartmentForm from "../ReportPermissionForm";
 import { axiosPrivate } from "../../../api/axios";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
-const NewUser = () => {
+const NewDepartment = () => {
   const { manageAccessToken } = useAuth();
+  const [limit, setLimit] = React.useState(100);
   const [loading, setLoading] = React.useState(false);
+  const [createLoading, setCreateLoading] = React.useState(false);
+  const [establishments, setEstablishments] = React.useState(null);
+  const [allDepartments, setAllDepartments] = React.useState({});
+  const [allEstablishments, setAllEstablishments] = React.useState({});
+  const [allHolidays, setAllHolidays] = React.useState({});
+  const [allReportForms, setAllReportForms] = React.useState({});
 
+  React.useEffect(() => {
+    // (async () => {
+    //   try {
+    //     setLoading(true);
+    //     const accessToken = await manageAccessToken();
+    //     const { data } = await axiosPrivate.get(
+    //       `/establishments`,
+    //       { headers: { Authorization: `Bearer ${accessToken}` } }
+    //     );
+    //     setEstablishments(data);
+    //   } catch (e) {
+    //     console.log(e);
+    //   } finally {
+    //     // common work
+    //     setLoading(false);
+    //   }
+    // })();
+  }, []);
 
   const onSubmit = async (formData) => {
     try {
-      
       setCreateLoading(true);
       const accessToken = await manageAccessToken();
       const { data } = await axiosPrivate.post(
@@ -38,7 +62,7 @@ const NewUser = () => {
           <div className="py-6">
             <div className="px-4 mx-auto sm:px-6 md:px-8">
               <h1 className="text-2xl font-bold text-gray-900">
-                New User
+                New Report Permission
               </h1>
             </div>
             <div className="px-4 mx-auto mt-8 sm:px-6 md:px-8">
@@ -48,7 +72,7 @@ const NewUser = () => {
                   Lorem ipsum dolor sit amet, consectetur adipis.
                 </p>
               </div>
-              {/* {loading ? (
+              {loading ? (
                 <></>
               ) : (
                 <DepartmentForm
@@ -60,7 +84,7 @@ const NewUser = () => {
                   // }}
                   loading={createLoading}
                 />
-              )} */}
+              )}
             </div>
           </div>
         </main>
@@ -69,4 +93,4 @@ const NewUser = () => {
   );
 };
 
-export default NewUser;
+export default NewDepartment;

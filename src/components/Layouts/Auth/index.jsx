@@ -4,24 +4,28 @@ import {
   DASHBOARD_PATH,
   DEPARTMENT_PATH,
   ESTABLISHMENT_PATH,
+  HOLIDAY_PATH,
   NEW_PATH,
   REPORT_FORM_PATH,
+  REPORT_PERMISSION_PATH,
   USER_PATH,
 } from "../../../config";
 import { useAuth } from "../../../context/AuthContext";
+import React from "react";
 
 const AuthLayout = () => {
   const { user } = useAuth();
+  const [expand, setExpand] = React.useState(-1);
   const navLists = [
     {
       title: "Dashboard",
-      Icon: <DownAngleIcon />,
+      Icon: DownAngleIcon,
       href: DASHBOARD_PATH,
     },
     {
       title: "User",
-      Icon: <DownAngleIcon />,
-      href: USER_PATH,
+      Icon: DownAngleIcon,
+      // href: USER_PATH,
       items: [
         {
           title: "All",
@@ -37,8 +41,8 @@ const AuthLayout = () => {
     },
     {
       title: "Establistment",
-      Icon: <DownAngleIcon />,
-      href: ESTABLISHMENT_PATH,
+      Icon: DownAngleIcon,
+      // href: ESTABLISHMENT_PATH,
       items: [
         {
           title: "All",
@@ -55,8 +59,8 @@ const AuthLayout = () => {
 
     {
       title: "Department",
-      Icon: <DownAngleIcon />,
-      href: DEPARTMENT_PATH,
+      Icon: DownAngleIcon,
+      // href: DEPARTMENT_PATH,
       items: [
         {
           title: "All",
@@ -72,8 +76,8 @@ const AuthLayout = () => {
     },
     {
       title: "Report Form",
-      Icon: <DownAngleIcon />,
-      href: REPORT_FORM_PATH,
+      Icon: DownAngleIcon,
+      // href: REPORT_FORM_PATH,
       items: [
         {
           title: "All",
@@ -86,8 +90,50 @@ const AuthLayout = () => {
           href: `${REPORT_FORM_PATH}${NEW_PATH}`,
         },
       ],
+    }, {
+      title: "Holiday",
+      Icon: DownAngleIcon,
+      // href: HOLIDAY_PATH,
+      items: [
+        {
+          title: "All",
+          Icon: <AnalyticsIcon />,
+          href: HOLIDAY_PATH,
+        },
+        {
+          title: "New",
+          Icon: <AnalyticsIcon />,
+          href: `${HOLIDAY_PATH}${NEW_PATH}`,
+        },
+      ],
+    },
+    {
+      title: "Report Permission",
+      Icon: DownAngleIcon,
+      // href: REPORT_PERMISSION_PATH,
+      items: [
+        {
+          title: "All",
+          Icon: <AnalyticsIcon />,
+          href: REPORT_PERMISSION_PATH,
+        },
+        {
+          title: "New",
+          Icon: <AnalyticsIcon />,
+          href: `${REPORT_PERMISSION_PATH}${NEW_PATH}`,
+        },
+      ],
     },
   ];
+  // React.useEffect(() => {
+  //   const eles = document.querySelectorAll(".nav-group-item");
+  //   if (eles?.length) {
+
+  //     eles.forEach((ele, i) => {
+  //       // console.log(ele.classList.add('expand'));
+  //     });
+  //   }
+  // }, []);
   return (
     <div className="flex flex-1 bg-gray-50">
       <div className="hidden md:flex md:w-64 md:flex-col">
@@ -121,31 +167,53 @@ const AuthLayout = () => {
             <hr className="border-gray-200" />
           </div>
           <div className="flex flex-col flex-1 px-3 mt-6">
-            {navLists.map(({ title, Icon, href, items }) => (
-              <div key={title} className="space-y-4">
-                <div className="flex-1 space-y-2">
+            {navLists.map(({ title, Icon, href, items }, idx) => (
+              <div
+                key={title}
+                className={`space-y-4 nav-group-${idx} nav-group-item`}
+              >
+                <div
+                  className="flex-1 space-y-2"
+                  onClick={() => {
+                    if (idx === expand) {
+                      setExpand(-1);
+                      return;
+                    }
+                    setExpand(idx);
+                  }}
+                >
                   <Link
-                    to={href}
+                    to={href || "#"}
                     className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group"
                   >
                     <AnalyticsIcon />
                     {title}
-                    {(Icon && <>{Icon}</>) || ""}
+                    {(Icon && (
+                      <Icon className={{ "rotate-180": expand === idx }} />
+                    )) ||
+                      ""}
                   </Link>
                 </div>
-                {items?.map?.((item) => (
-                  <Link
-                    key={`${title}.${item.title}`}
-                    to={item.href}
-                    className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group"
-                  >
-                    <AnalyticsIcon />
-                    {item.title}
-                  </Link>
-                ))}
+                <div
+                  className={cn("transition-all duration-200", {
+                    block: idx === expand,
+                    hidden: idx !== expand,
+                  })}
+                >
+                  {items?.map?.((item) => (
+                    <Link
+                      key={`${title}.${item.title}`}
+                      to={item.href}
+                      className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group"
+                    >
+                      <AnalyticsIcon />
+                      {item.title}
+                    </Link>
+                  ))}
+                </div>
                 <hr className="border-gray-200" />
               </div>
-            ))}
+            )) || ""}
 
             <div className="pb-4 mt-20">
               <button
@@ -225,6 +293,30 @@ const DownAngleIcon = ({ className }) => (
     strokeWidth={2}
   >
     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+  </svg>
+);
+const UpAngleIcon = ({ className }) => (
+  <svg
+    className={cn(
+      "w-4 h-6 ml-auto text-gray-400 group-hover:text-white",
+      className
+    )}
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    width="100"
+    height="100"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="12" cy="5" r="2" />
+    <path d="M12 5v6a2 2 0 0 0 2 2h5.2a10 10 0 0 1-2.32 6.22" />
+    <line x1="12" y1="17" x2="12" y2="17" />
+
+    <path d="M20.94 6.94l-2.33-2.33a10 10 0 0 0-6.22 2.32" />
+    <line x1="2" y1="2" x2="6" y2="6" />
   </svg>
 );
 const AnalyticsIcon = ({ className }) => (
