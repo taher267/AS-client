@@ -22,12 +22,12 @@ export default function ({
             htmlFor=""
             className="block text-sm font-bold text-gray-900 sm:mt-px sm:pt-2"
           >
-            Department Name
+            Weekend
           </label>
           <div className="mt-2 sm:mt-0 sm:col-span-2">
             <RHFInput
-              validation={`required→true←Department name is mandatory`}
-              {...{ Controller, control }}
+              // validation={`required→true←Department name is mandatory`}
+              {...{ Controller, control, type: "date" }}
               name="name"
               placeholder="Enter Department"
               defaultValue={defaultValues["name"] || ""}
@@ -49,11 +49,20 @@ export default function ({
               {...{
                 Controller,
                 control,
-                options: holidays || [],
+                options: [
+                  { name: "Sunday", id: 0 },
+                  { name: "Monday", id: 1 },
+                  { name: "Tuesday", id: 2 },
+                  { name: "Wednesday", id: 3 },
+                  { name: "Thursday", id: 4 },
+                  { name: "Friday", id: 5 },
+                  { name: "Saturday", id: 6 },
+                ],
+                multiple: true,
                 selector: { label: "name", value: "id" },
                 // options: holidays.map((item) => item.name),
               }}
-              name="establishment_id"
+              name="week"
               type="select"
               placeholder="Enter Establishment"
               // defaultValue="Software Developer"

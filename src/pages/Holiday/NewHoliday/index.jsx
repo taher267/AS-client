@@ -30,6 +30,8 @@ const NewDepartment = () => {
 
   const onSubmit = async (formData) => {
     try {
+      console.log(formData);
+      return;
       setCreateLoading(true);
       const accessToken = await manageAccessToken();
       const { data } = await axiosPrivate.post(
@@ -65,6 +67,15 @@ const NewDepartment = () => {
                   Lorem ipsum dolor sit amet, consectetur adipis.
                 </p>
               </div>
+              <DepartmentForm
+                onSubmit={onSubmit}
+                holidays={holidays?.data || [{}]}
+                // defaultValues={{
+                //   name: "Taher",
+                //   Holiday: "65808706e750347c2485ff24",
+                // }}
+                loading={createLoading}
+              />
               {/* {loading ? (
                 <></>
               ) : (

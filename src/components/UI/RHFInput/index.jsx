@@ -12,6 +12,7 @@ const RHFInput = ({
   defaultValue = "",
   validation,
   options,
+  multiple=false,
   setGqlErrs,
   gqlErrs,
   selector = {},
@@ -78,6 +79,7 @@ const RHFInput = ({
               {...field}
               {...{
                 defaultValue,
+                multiple,
                 name,
                 selector,
                 ...restProps,
