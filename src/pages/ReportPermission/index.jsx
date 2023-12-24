@@ -29,7 +29,7 @@ const ReportPermission = () => {
           headers: { Authorization: `Bearer ${accessToken}` },
           signal,
         });
-        setAllReportPermissions(data);
+        setAllReportPermissions(data.data);
       } catch (err) {
         const msg = err.response?.data?.message || err.message;
         toast.error(msg);
