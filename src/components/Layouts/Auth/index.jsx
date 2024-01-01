@@ -9,6 +9,7 @@ import {
   REPORT_FORM_PATH,
   REPORT_PERMISSION_PATH,
   USER_PATH,
+  WORK_REPORT_PATH,
 } from "../../../config";
 import { useAuth } from "../../../context/AuthContext";
 import React from "react";
@@ -21,6 +22,11 @@ const AuthLayout = () => {
       title: "Dashboard",
       Icon: DownAngleIcon,
       href: DASHBOARD_PATH,
+    },
+    {
+      title: "Work Report",
+      Icon: DownAngleIcon,
+      href: WORK_REPORT_PATH,
     },
     {
       title: "User",
@@ -85,12 +91,18 @@ const AuthLayout = () => {
           href: REPORT_FORM_PATH,
         },
         {
+          title: "Self",
+          Icon: <AnalyticsIcon />,
+          href: `${REPORT_FORM_PATH}/self`,
+        },
+        {
           title: "New",
           Icon: <AnalyticsIcon />,
           href: `${REPORT_FORM_PATH}${NEW_PATH}`,
         },
       ],
-    }, {
+    },
+    {
       title: "Holiday",
       Icon: DownAngleIcon,
       // href: HOLIDAY_PATH,
@@ -175,6 +187,7 @@ const AuthLayout = () => {
                 <div
                   className="flex-1 space-y-2"
                   onClick={() => {
+                    if (!items?.length) return;
                     if (idx === expand) {
                       setExpand(-1);
                       return;

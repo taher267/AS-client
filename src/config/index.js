@@ -7,6 +7,7 @@ export const ESTABLISHMENT_PATH = `/establishments`;
 export const DEPARTMENT_PATH = `/departments`;
 export const HOLIDAY_PATH = `/holidays`;
 export const REPORT_PERMISSION_PATH = `/report-permissions`;
+export const WORK_REPORT_PATH = `/work-reports`;
 export const REPORT_FORM_PATH = `/report-forms`;
 // export const FORM_PERMISSION_PATH = `/forms-permissions`;
 export const NEW_PATH = `/new`;
