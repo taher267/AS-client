@@ -2,16 +2,17 @@
 // import NewInputField from "./NewReportForm/NewInputField";
 
 import React from "react";
-import axios, { axiosPrivate } from "../../api/axios";
+import { axiosPrivate } from "../../api/axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
 import Table from "../../components/Table";
 import { Link } from "react-router-dom";
-import { REPORT_FORM_PATH, REPORT_FORM_SUBMISSION_PATH } from "../../config";
+import { WORK_REPORT_PATH, REPORT_FORM_SUBMISSION_PATH } from "../../config";
 
-const SelfReportForm = () => {
+const Self = () => {
   const { manageAccessToken } = useAuth();
-  const [allSelfReportForm, setAllSelfReportForms] = React.useState({});
+  const [allSelfReportPermission, setAllSelfReportPermission] =
+    React.useState();
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -19,11 +20,11 @@ const SelfReportForm = () => {
     (async () => {
       try {
         const accessToken = await manageAccessToken();
-        const { data } = await axiosPrivate.get(`report-forms/self`, {
+        const { data } = await axiosPrivate.get(`report-permissions/self`, {
           headers: { Authorization: `Bearer ${accessToken}` },
           signal,
         });
-        setAllSelfReportForms(data);
+        setAllSelfReportPermission(data);
       } catch (err) {
         const msg = err.response?.data?.message || err.message;
         toast.error(msg);
@@ -51,9 +52,13 @@ const SelfReportForm = () => {
                   My Alocated Forms
                 </p>
               </div>
-              {(allSelfReportForm?.data?.length && (
+              {(allSelfReportPermission?.data?.length && (
                 <Table
-                  {...{ dataItems: allSelfReportForm.data, headers, Action }}
+                  {...{
+                    dataItems: allSelfReportPermission.data,
+                    headers,
+                    Action,
+                  }}
                 />
               )) ||
                 ""}
@@ -65,7 +70,7 @@ const SelfReportForm = () => {
   );
 };
 
-export default SelfReportForm;
+export default Self;
 
 const Action = ({ deleteItem, deleting, item }) => {
   const { link, ...itemRest } = item;
@@ -85,7 +90,7 @@ const Action = ({ deleteItem, deleting, item }) => {
       </button> */}
       <Link
         state={linkState}
-        to={`${REPORT_FORM_PATH}/${item?.id}${REPORT_FORM_SUBMISSION_PATH}`}
+        to={`${WORK_REPORT_PATH}/${item?.id}${REPORT_FORM_SUBMISSION_PATH}`}
         className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         Submisson
@@ -125,13 +130,13 @@ const headers = {
     "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
   items: [
     {
-      title: "Name",
-      field: "name",
+      title: "ID",
+      field: "id",
     },
-    {
-      title: "Status",
-      field: "status",
-    },
+    // {
+    //   title: "Status",
+    //   field: "status",
+    // },
     {
       title: <span className="sr-only"> Actions </span>,
       className: "",

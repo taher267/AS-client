@@ -14,6 +14,22 @@ const Input = ({
   ...rest
 }) => {
   // console.log(rest);
+  const componentCommonProps = {
+    ...rest,
+    ref: inputRef,
+    id: name,
+    name,
+    className: cn(
+      "border block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600",
+      className,
+      {
+        "border-red-500": error,
+        "placeholder-red-500": error,
+        "focus:border-red-600": error,
+        "focus:ring-red-600": error,
+      }
+    ),
+  };
   return (
     <div className="w-full">
       {label ? (
@@ -27,23 +43,11 @@ const Input = ({
         ""
       )}
       <div className="mt-2">
-        <input
-          ref={inputRef}
-          {...rest}
-          id={name}
-          name={name}
-          type={type}
-          className={cn(
-            "border block w-full px-4 py-3 placeholder-gray-500 border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm caret-indigo-600",
-            className,
-            {
-              "border-red-500": error,
-              "placeholder-red-500": error,
-              "focus:border-red-600": error,
-              "focus:ring-red-600": error,
-            }
-          )}
-        />
+        {type === "textarea" ? (
+          <textarea {...componentCommonProps} />
+        ) : (
+          <input {...componentCommonProps} type={type} />
+        )}
       </div>
       {(error && (
         <p

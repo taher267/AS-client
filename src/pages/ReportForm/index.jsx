@@ -5,7 +5,6 @@ import React from "react";
 import axios, { axiosPrivate } from "../../api/axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
-import Table from "../../components/Table";
 
 const ReportForm = () => {
   const { manageAccessToken } = useAuth();

@@ -1,8 +1,11 @@
-export default (items) => {
-  if (!items) return {};
+export default ({ data }) => {
+  if (!data) return {};
+  if (typeof data !== "string") {
+    throw new Error(`Please provide valid validation string`);
+  }
   const rules = {};
 
-  for (const im of items.split("∂")) {
+  for (const im of data?.split?.("∂") || []) {
     const item = im.split(/→|←/g);
     if (item.length === 3) {
       const [k, v, m] = item;

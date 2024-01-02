@@ -9,6 +9,7 @@ export const HOLIDAY_PATH = `/holidays`;
 export const REPORT_PERMISSION_PATH = `/report-permissions`;
 export const WORK_REPORT_PATH = `/work-reports`;
 export const REPORT_FORM_PATH = `/report-forms`;
+export const REPORT_FORM_SUBMISSION_PATH = `/submission`;
 // export const FORM_PERMISSION_PATH = `/forms-permissions`;
 export const NEW_PATH = `/new`;
 export const UPDATE_PATH = `/update`;

@@ -1,8 +1,8 @@
 import React from "react";
 import Input from "../Input";
-import stringToRHFRules from "./stringToRHFRules";
 import Select from "../Select";
 import MultiInputList from "../MultiInputList";
+import stringToRHFRules from "../../../utils/validation/stringToRHFRules";
 
 const RHFInput = ({
   type = "text",
@@ -12,7 +12,7 @@ const RHFInput = ({
   defaultValue = "",
   validation,
   options,
-  multiple=false,
+  multiple = false,
   setGqlErrs,
   gqlErrs,
   selector = {},
@@ -24,7 +24,7 @@ const RHFInput = ({
       <div className="text-red-600">Please provide Controller & controll</div>
     );
   }
-  const rules = validation ? stringToRHFRules(validation) : {};
+  const rules = validation ? stringToRHFRules({ data: validation }) : {};
   if (
     //["text", "email", "password", "url"]
     inputsTypes.includes(type)
@@ -128,7 +128,7 @@ const RHFInput = ({
   }
   return (
     <div className="text-red-800">
-      {`Doesn't match any input!`}
+      {`${type}, Doesn't match any input!`}
       {/* {type} */}
     </div>
   );
@@ -156,6 +156,7 @@ const inputsTypes = [
   "submit",
   "tel",
   "text",
+  "textarea",
   "time",
   "url",
   "week",

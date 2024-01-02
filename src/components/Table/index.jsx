@@ -46,6 +46,7 @@ const Table = ({
   dataItems = [],
   deleteItem,
   deleting,
+  Action,
 }) => {
   // console.log(dataItems);
   return (
@@ -131,13 +132,14 @@ const Table = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {dataItems?.map((item) => (
-                    <tr key={item.id} className="bg-white">
+                  {dataItems?.map((item, idx) => (
+                    <tr key={idx} className="bg-white">
                       <td className="px-4 py-4 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
-                        <div>{item[headers.items[0].title]}</div>
+                        <div>{item[headers.items[0].field]}</div>
                         <div className="mt-1 space-y-2 font-medium pl-11 lg:hidden">
                           {headers?.items?.map?.((im, k) => {
-                            if (k !== 0 || k !== headers?.items?.length - 1) {
+                            if (k !== 0) {
+                              //|| k !== headers?.items?.length - 1
                               return (
                                 <div
                                   key={`${item.id}${im.title}`}
@@ -149,7 +151,12 @@ const Table = ({
                             }
                           })}
                           <div className="flex items-center pt-3 space-x-4">
-                            <button
+                            {Action ? (
+                              <Action {...{ deleteItem, deleting, item }} />
+                            ) : (
+                              ""
+                            )}
+                            {/* <button
                               type="button"
                               className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
@@ -162,12 +169,14 @@ const Table = ({
                               className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
                               Remove
-                            </button>
+                            </button> */}
                           </div>
                         </div>
                       </td>
+
                       {headers?.items?.map?.((im, k) => {
-                        if (k !== 0 || k !== headers?.items?.length - 1) {
+                        if (k !== 0) {
+                          //|| k !== headers?.items?.length - 1
                           return (
                             <td
                               key={`${item.id}.${im.title}`}
@@ -182,7 +191,12 @@ const Table = ({
                       })}
 
                       <td className="hidden px-4 py-4 lg:table-cell whitespace-nowrap">
-                        <div className="flex items-center space-x-4">
+                        {Action ? (
+                          <Action {...{ deleteItem, deleting, item }} />
+                        ) : (
+                          ""
+                        )}
+                        {/* <div className="flex items-center space-x-4">
                           <button
                             type="button"
                             className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -211,7 +225,7 @@ const Table = ({
                             </svg>
                             Remove
                           </button>
-                        </div>
+                        </div> */}
                       </td>
                     </tr>
                   ))}

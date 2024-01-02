@@ -26,7 +26,14 @@ const AuthLayout = () => {
     {
       title: "Work Report",
       Icon: DownAngleIcon,
-      href: WORK_REPORT_PATH,
+      href: "#", // WORK_REPORT_PATH,
+      items: [
+        {
+          title: "Self",
+          Icon: <AnalyticsIcon />,
+          href: `${WORK_REPORT_PATH}/self`,
+        },
+      ],
     },
     {
       title: "User",
@@ -128,6 +135,11 @@ const AuthLayout = () => {
           title: "All",
           Icon: <AnalyticsIcon />,
           href: REPORT_PERMISSION_PATH,
+        },
+        {
+          title: "Self",
+          Icon: <AnalyticsIcon />,
+          href: `${REPORT_PERMISSION_PATH}/self`,
         },
         {
           title: "New",
