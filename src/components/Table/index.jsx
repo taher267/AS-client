@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import cn from "../../utils/cn";
 const data = {
   headers: {
@@ -140,14 +140,21 @@ const Table = ({
                           {headers?.items?.map?.((im, k) => {
                             if (k !== 0) {
                               //|| k !== headers?.items?.length - 1
-                              return (
-                                <div
-                                  key={`${item.id}${im.title}`}
-                                  className="flex items-center"
-                                >
-                                  {item[im.field]}
-                                </div>
-                              );
+                              if (im?.render) {
+                                return (
+                                  <Fragment key={`${item.id}.${im.title}`}>
+                                    {im.render?.(item)}
+                                  </Fragment>
+                                );
+                              } else
+                                return (
+                                  <div
+                                    key={`${item.id}${im.title}`}
+                                    className="flex items-center"
+                                  >
+                                    {item[im.field]}
+                                  </div>
+                                );
                             }
                           })}
                           <div className="flex items-center pt-3 space-x-4">
@@ -156,20 +163,6 @@ const Table = ({
                             ) : (
                               ""
                             )}
-                            {/* <button
-                              type="button"
-                              className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                              Edit Details
-                            </button>
-                            <button
-                              onClick={() => deleteItem?.(item.id)}
-                              disabled={deleting}
-                              type="button"
-                              className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                              Remove
-                            </button> */}
                           </div>
                         </div>
                       </td>
@@ -177,16 +170,27 @@ const Table = ({
                       {headers?.items?.map?.((im, k) => {
                         if (k !== 0) {
                           //|| k !== headers?.items?.length - 1
-                          return (
-                            <td
-                              key={`${item.id}.${im.title}`}
-                              className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
-                            >
-                              <div className="flex items-center">
-                                {item[im.field]}
-                              </div>
-                            </td>
-                          );
+                          if (im?.render) {
+                            return (
+                              <td
+                                key={`${item.id}.${im.title}`}
+                                className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
+                              >
+                                {im.render?.(item)}
+                              </td>
+                            );
+                          } else {
+                            return (
+                              <td
+                                key={`${item.id}.${im.title}`}
+                                className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
+                              >
+                                <div className="flex items-center">
+                                  {item[im.field]}
+                                </div>
+                              </td>
+                            );
+                          }
                         }
                       })}
 

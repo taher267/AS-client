@@ -42,6 +42,7 @@ const NewReportForm = Loadable(
 const WorkReportSubmission = Loadable(
   lazy(() => import("../pages/WorkReport/Submission"))
 );
+const SelfWorkReport = Loadable(lazy(() => import("../pages/WorkReport/Self")));
 const ReportPermission = Loadable(
   lazy(() => import("../pages/ReportPermission"))
 );
@@ -55,6 +56,8 @@ const SelfReportPermission = Loadable(
 const Holiday = Loadable(lazy(() => import("../pages/Holiday")));
 const NewHoliday = Loadable(lazy(() => import("../pages/Holiday/NewHoliday")));
 const WorkReport = Loadable(lazy(() => import("../pages/WorkReport")));
+import NotFound from "../pages/Error/404";
+// const NotFound = Loadable(lazy(() => import("../pages/Error/404")));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -134,6 +137,12 @@ const MainRoutes = {
       path: WORK_REPORT_PATH,
       element: <WorkReport />,
     },
+
+    {
+      path: `${WORK_REPORT_PATH}/self`,
+      element: <SelfWorkReport />,
+    },
+    
     {
       path: `${WORK_REPORT_PATH}/:id${REPORT_FORM_SUBMISSION_PATH}`,
       element: <WorkReportSubmission />,
@@ -149,6 +158,10 @@ const MainRoutes = {
     {
       path: "/",
       element: <Home />,
+    },
+    {
+      path: "*",
+      element: <NotFound />,
     },
     // {
     //   path: "/expired",
