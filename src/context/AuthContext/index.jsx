@@ -4,7 +4,12 @@ import React from "react";
 import localStorageState from "../../utils/auth/localStorageState";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
-import { DASHBOARD_PATH, HOME_PATH, SIGNIN_PATH } from "../../config";
+import {
+  ADMIN_ROLES,
+  DASHBOARD_PATH,
+  HOME_PATH,
+  SIGNIN_PATH,
+} from "../../config";
 import { jwtDecode } from "jwt-decode";
 
 const initialState = {
@@ -13,6 +18,7 @@ const initialState = {
   googleLoading: false,
   authErr: null,
   isAuthenticated: false,
+  isAuthorized: false,
 };
 
 export const ACTIONS = {
@@ -27,12 +33,31 @@ export const ACTIONS = {
   REDUCE_CREDITS: "REDUCE_CREDITS",
   UPDATE_USER: "UPDATE_USER",
 };
+const userIsAuthorize = ({ roles = [], permissions = ADMIN_ROLES || [] }) => {
+  let isAuthorized = false;
+  if (!roles?.length || !permissions?.length) return isAuthorized;
+  for (const permission of permissions || []) {
+    if (roles?.includes(permission)) {
+      isAuthorized = true;
+      break;
+    }
+  }
+  return isAuthorized;
+};
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.LOGIN:
+      const payload = action.payload;
+
+      const isAuthorized = userIsAuthorize({
+        roles: payload?.user?.roles || [],
+        permissions: ADMIN_ROLES,
+      });
       return {
         ...state,
-        ...action.payload,
+        ...payload,
+        isAuthenticated: true,
+        isAuthorized,
       };
 
     case ACTIONS.LOADING_START:
@@ -84,7 +109,7 @@ export const AuthProvider = ({ children }) => {
         });
         dispatch({
           type: ACTIONS.LOGIN,
-          payload: { user: data.data, isAuthenticated: true },
+          payload: { user: data.data },
         });
       } else {
         localStorageState.deleteAccessToken();
@@ -182,7 +207,7 @@ export const AuthProvider = ({ children }) => {
         localStorageState.setAccessToken(accessToken);
         dispatch({
           type: ACTIONS.LOGIN,
-          payload: { user, isAuthenticated: true },
+          payload: { user },
         });
         toast.success(data.message, { duration: 2000 });
       } else {

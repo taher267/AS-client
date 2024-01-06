@@ -27,7 +27,7 @@ const initFields = {
 const WorkReportForm = ({ submitBtnTitle = "Submit" }) => {
   const { manageAccessToken } = useAuth();
   const navigate = useNavigate();
-  const [gqlErrs, setGqlErrs] = useState({});
+  const [inputErrors, setInputErrors] = useState({});
   const [gqlCommonErr, setGqlCommonErr] = useState({});
   const [checkingSL_Id, setCheckingSL_Id] = useState(false);
   const [processing, setprocessing] = useState(false);
@@ -100,9 +100,9 @@ const WorkReportForm = ({ submitBtnTitle = "Submit" }) => {
   };
 
   const onFocus = ({ target: { name } }) => {
-    let newErr = { ...gqlErrs };
+    let newErr = { ...inputErrors };
     delete newErr[name];
-    setGqlErrs(newErr);
+    setInputErrors(newErr);
   };
 
   return (
@@ -183,8 +183,8 @@ const WorkReportForm = ({ submitBtnTitle = "Submit" }) => {
                                 {...{
                                   control,
                                   Controller,
-                                  gqlErrs,
-                                  setGqlErrs,
+                                  inputErrors,
+                                  setInputErrors,
                                   name: `fields.${i}.${keye}`,
                                   ...InputFieldValidation?.[keye],
                                   onFocus,
@@ -203,7 +203,7 @@ const WorkReportForm = ({ submitBtnTitle = "Submit" }) => {
                   <Button
                     disabled={
                       processing ||
-                      // Object.keys(gqlErrs).length > 0 ||
+                      // Object.keys(inputErrors).length > 0 ||
                       Object.keys(errors).length > 0
                     }
                     type="submit"

@@ -7,23 +7,9 @@ import { useEffect } from "react";
 import Button from "../../../../components/UI/Button";
 import RHFInput from "../../../../components/UI/RHFInput";
 
-const initFields = {
-  label: "",
-  name: "",
-  type: "",
-  // sl_id: "",
-  // template: "",
-  status: "",
-  placeholder: "",
-  options: [],
-  params: "",
-  validation: "",
-  // icon: "",
-};
-
-const SubmissionForm = ({ fields, onSubmit, defaultValues }) => {
+export default function ({ fields, onSubmit, defaultValues }) {
   const navigate = useNavigate();
-  const [gqlErrs, setGqlErrs] = useState({});
+  const [inputErrors, setInputErrors] = useState({});
   const [gqlCommonErr, setGqlCommonErr] = useState({});
   const [checkingSL_Id, setCheckingSL_Id] = useState(false);
   const [processing, setprocessing] = useState(false);
@@ -39,41 +25,10 @@ const SubmissionForm = ({ fields, onSubmit, defaultValues }) => {
     defaultValues: { ...defaultValues },
   });
 
-  useEffect(() => {
-    if ("data") {
-      // reset();
-      // navigate('/dashboard/measurement', { state: 'reload' });
-      // console.log(data);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (checkingSL_Id) {
-      uniqueSl_ID(watch("fields"));
-    }
-  }, [checkingSL_Id]);
-
-  const uniqueSl_ID = (data = []) => {
-    const mapping = [];
-    let k = 0;
-    const errs = [];
-    for (const { sl_id } of data) {
-      if (mapping.includes(sl_id)) {
-        errs.push({ k, sl_id });
-      }
-      mapping.push(sl_id);
-      k++;
-    }
-    if (errs.length) {
-      console.log(errs);
-      // setError('fields')
-    }
-  };
-
   const onFocus = ({ target: { name } }) => {
-    let newErr = { ...gqlErrs };
-    delete newErr[name];
-    setGqlErrs(newErr);
+    // let newErr = { ...inputErrors };
+    // delete newErr[name];
+    // setInputErrors(newErr);
   };
 
   return (
@@ -82,7 +37,7 @@ const SubmissionForm = ({ fields, onSubmit, defaultValues }) => {
       <div>
         <p variant="h6">Report Submission</p>
         <div>
-          {Object.values(gqlErrs || {})?.map?.((item) => (
+          {Object.values(inputErrors || {})?.map?.((item) => (
             <p sx={{ color: "red" }} key={item}>
               {item}
             </p>
@@ -97,8 +52,8 @@ const SubmissionForm = ({ fields, onSubmit, defaultValues }) => {
                     defaultValue: defaultValues?.[field?.name] || "",
                     control,
                     Controller,
-                    gqlErrs,
-                    setGqlErrs,
+                    inputErrors,
+                    // setInputErrors,
                     ...field,
 
                     onFocus,
@@ -113,7 +68,7 @@ const SubmissionForm = ({ fields, onSubmit, defaultValues }) => {
             <Button
               disabled={
                 processing ||
-                // Object.keys(gqlErrs).length > 0 ||
+                // Object.keys(inputErrors).length > 0 ||
                 Object.keys(errors).length > 0
               }
               type="submit"
@@ -126,6 +81,4 @@ const SubmissionForm = ({ fields, onSubmit, defaultValues }) => {
       </div>
     </div>
   );
-};
-
-export default SubmissionForm;
+}

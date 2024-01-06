@@ -10,6 +10,7 @@ import SubmissionForm from "./SubmissionForm";
 import keyValueValidation from "../../../utils/validation/keyValueValidation";
 import filteringRequiredKeys from "../../../utils/validation/filteringRequiredKeys";
 import { WORK_REPORT_PATH } from "../../../config";
+import SimpleForm from "../../../components/SimpleForm";
 
 const Submission = () => {
   const { id: permited_id } = useParams();
@@ -59,7 +60,7 @@ const Submission = () => {
     };
   }, [location?.state?.id, permited_id]);
   // console.log(new Date().toISOString())
-  const onSubmit = async (form_data) => {
+  const onSubmit = async (form_data, reset) => {
     try {
       const validationCheck = keyValueValidation({
         keys: filteringRequiredKeys({ values: form_fields }),
@@ -107,15 +108,10 @@ const Submission = () => {
                 </p>
               </div>
               {!loading && form_fields?.length && (
-                <SubmissionForm
+                <SimpleForm
                   {...{
-                    defaultValues: {
-                      for_submission_date:
-                        permitedForm?.data?.open_submission_date?.slice?.(
-                          0,
-                          10
-                        ) || "",
-                    },
+                    button_desabled: loading,
+                    onSubmit,
                     fields: [
                       {
                         // name: "open_submission_date",
@@ -132,7 +128,13 @@ const Submission = () => {
                       },
                       ...form_fields,
                     ],
-                    onSubmit,
+                    defaultValues: {
+                      for_submission_date:
+                        permitedForm?.data?.open_submission_date?.slice?.(
+                          0,
+                          10
+                        ) || "",
+                    },
                   }}
                 />
               )}

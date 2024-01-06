@@ -13,5 +13,8 @@ export const REPORT_FORM_SUBMISSION_PATH = `/submission`;
 // export const FORM_PERMISSION_PATH = `/forms-permissions`;
 export const NEW_PATH = `/new`;
 export const UPDATE_PATH = `/update`;
+export const ADMIN_ROLES = ["super_admin", "admin"];
+export const USER_ROLES = ["user"];
+export const ROLES = [...ADMIN_ROLES, ...USER_ROLES];
 
 export const AUTH_PATHS = [SIGNIN_PATH, SIGNIN_PATH];

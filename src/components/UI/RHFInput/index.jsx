@@ -13,8 +13,7 @@ const RHFInput = ({
   validation,
   options,
   multiple = false,
-  setGqlErrs,
-  gqlErrs,
+  inputErrors,
   selector = {},
   // className,
   ...restProps

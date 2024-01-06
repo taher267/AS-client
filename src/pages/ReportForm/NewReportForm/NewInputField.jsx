@@ -24,7 +24,7 @@ const initFields = {
 
 const NewInputField = () => {
   const navigate = useNavigate();
-  const [gqlErrs, setGqlErrs] = useState({});
+  const [inputErrors, setInputErrors] = useState({});
   const [gqlCommonErr, setGqlCommonErr] = useState({});
   const [checkingSL_Id, setCheckingSL_Id] = useState(false);
   const [processing, setprocessing] = useState(false);
@@ -83,7 +83,7 @@ const NewInputField = () => {
   });
 
   const onSubmit = (data) => {
-    // setGqlErrs({});
+    // setInputErrors({});
     console.log(data);
     return;
 
@@ -117,9 +117,9 @@ const NewInputField = () => {
   };
 
   const onFocus = ({ target: { name } }) => {
-    let newErr = { ...gqlErrs };
+    let newErr = { ...inputErrors };
     delete newErr[name];
-    setGqlErrs(newErr);
+    setInputErrors(newErr);
   };
 
   return (
@@ -132,7 +132,7 @@ const NewInputField = () => {
           /required→true←message∂
         </p>
         <div>
-          {Object.values(gqlErrs || {})?.map?.((item) => (
+          {Object.values(inputErrors || {})?.map?.((item) => (
             <p sx={{ color: "red" }} key={item}>
               {item}
             </p>
@@ -143,8 +143,8 @@ const NewInputField = () => {
             {...{
               control,
               Controller,
-              gqlErrs,
-              setGqlErrs,
+              inputErrors,
+              setInputErrors,
               name: "name",
               errors,
               placeholder: "Name globally unique",
@@ -181,8 +181,8 @@ const NewInputField = () => {
                           {...{
                             control,
                             Controller,
-                            gqlErrs,
-                            setGqlErrs,
+                            inputErrors,
+                            setInputErrors,
                             name: `fields.${i}.${keye}`,
                             ...InputFieldValidation?.[keye],
                             onFocus,
@@ -201,7 +201,7 @@ const NewInputField = () => {
             <Button
               disabled={
                 processing ||
-                // Object.keys(gqlErrs).length > 0 ||
+                // Object.keys(inputErrors).length > 0 ||
                 Object.keys(errors).length > 0
               }
               type="submit"
