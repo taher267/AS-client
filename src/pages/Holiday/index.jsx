@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { axiosPrivate } from "../../api/axios";
 import Table from "../../components/Table";
+import zeroSixByDaysName from "../../utils/zero-six-by-days-name";
 
 const Department = () => {
   const { manageAccessToken } = useAuth();
@@ -90,8 +91,28 @@ const headers = {
       field: "name",
     },
     {
-      title: "establishment_id",
+      title: "Weekend",
+      field: "weekly",
+      render: ({ weekly }) => {
+        return (
+          <div>
+            {/* {weekly?.map((item) => (
+              <span key={item}>{zeroSixByDaysName(item)}</span>
+            ))} */}
+
+            {weekly?.map((item) => zeroSixByDaysName(item)).join(", ")}
+          </div>
+        );
+      },
     },
+    {
+      title: "occasional",
+      field: "occasional",
+      render: ({ occasional }) => {
+        return <div>{occasional?.join?.(", ")}</div>;
+      },
+    },
+
     {
       title: <span className="sr-only"> Actions </span>,
       className: "",

@@ -3,12 +3,16 @@ import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { axiosPrivate } from "../../api/axios";
 import Table from "../../components/Table";
+import { Link } from "react-router-dom";
 
 const ReportPermission = () => {
   const { manageAccessToken } = useAuth();
   const [allReportPermissions, setAllReportPermissions] = React.useState({});
 
   const [allUsers, setAllUsers] = React.useState({});
+  const [qryStrObj, setQryStrObj] = React.useState({
+    expands: `user,observer,report_form`,
+  });
   const [deleting, setDeleting] = React.useState(false);
 
   //   observer
@@ -25,11 +29,14 @@ const ReportPermission = () => {
     (async () => {
       try {
         const accessToken = await manageAccessToken();
-        const { data } = await axiosPrivate.get(`report-permissions`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-          signal,
-        });
-        setAllReportPermissions(data.data);
+        const { data } = await axiosPrivate.get(
+          `report-permissions?${new URLSearchParams(qryStrObj)}`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+            signal,
+          }
+        );
+        setAllReportPermissions(data);
       } catch (err) {
         const msg = err.response?.data?.message || err.message;
         toast.error(msg);
@@ -40,7 +47,7 @@ const ReportPermission = () => {
       // Cancel the request when the component unmounts
       controller.abort();
     };
-  }, []);
+  }, [qryStrObj]);
   const deleteItem = async (id) => {
     try {
       setDeleting(true);
@@ -60,58 +67,105 @@ const ReportPermission = () => {
     }
   };
   return (
-    <div>
-      <div className="flex flex-col flex-1 ">
-        <main>
-          <div className="py-6">
-            <div className="px-4 mx-auto sm:px-6 md:px-8">
-              <h1 className="text-2xl font-bold text-gray-900">
-                Report Permission
-              </h1>
-            </div>
-            <div className="px-4 mx-auto mt-8 sm:px-6 md:px-8">
-              <div className="mt-6">
-                {/* <p className="text-base font-bold text-gray-900">Profile</p> */}
-                <p className="mt-1 text-sm font-medium text-gray-500">
-                  Lorem ipsum dolor sit amet, consectetur adipis.
-                </p>
-              </div>
-              {/* <Table
-                {...{
-                  headers,
-                  dataItems: allDepartments?.data || [],
-                  deleteItem,
-                  deleting,
-                }}
-              /> */}
-            </div>
+    <main className="flex flex-col flex-1 ">
+      <div className="py-6">
+        <div className="px-4 mx-auto sm:px-6 md:px-8">
+          <h1 className="text-2xl font-bold text-gray-900">Report Forms</h1>
+        </div>
+        <div className="px-4 mx-auto mt-8 sm:px-6 md:px-8">
+          <div className="mt-6">
+            {/* <p className="text-base font-bold text-gray-900">Profile</p> */}
+            <p className="mt-1 text-sm font-medium text-gray-500">
+              Form allocated to me
+            </p>
           </div>
-        </main>
+          {(allReportPermissions?.data?.length && (
+            <Table
+              {...{
+                dataItems: allReportPermissions.data,
+                headers,
+                Action,
+              }}
+            />
+          )) ||
+            ""}
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 
 export default ReportPermission;
+
+const Action = ({ deleteItem, deleting, item }) => {
+  const { link, ...itemRest } = item;
+  const linkState = {
+    data: itemRest,
+    links: {
+      self: link,
+    },
+  };
+  return (
+    <div className="flex items-center space-x-4">
+      {/* <button
+        type="button"
+        className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Report Form
+      </button> */}
+      <Link
+        state={linkState}
+        to={`#`}
+        // to={`${WORK_REPORT_PATH}/${item?.id}${REPORT_FORM_SUBMISSION_PATH}`}
+        className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        DEMO
+      </Link>
+      {/* <button
+        onClick={() => {
+          if (deleteItem && id) {
+            deleteItem?.(id);
+          }
+        }}
+        disabled={deleting}
+        type="button"
+        className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        <svg
+          className="w-5 h-5 mr-2 -ml-1"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        Remove
+      </button> */}
+    </div>
+  );
+};
 
 const headers = {
   className:
     "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
   items: [
     {
-      title: "Name",
-      field: "name",
+      title: "ID",
+      field: "id",
     },
-    {
-      title: "establishment_id",
-    },
+    // {
+    //   title: "Status",
+    //   field: "status",
+    // },
     {
       title: <span className="sr-only"> Actions </span>,
       className: "",
-
-      //     <th className="relative py-3.5 pl-4 pr-4 md:pr-0">
-      //     <span className="sr-only"> Actions </span>
-      //   </th>
     },
   ],
 };

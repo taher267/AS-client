@@ -179,13 +179,13 @@ export default function Sidebar() {
 
   return (
     <>
-      {navList.map((nav) => {
+      {navList.map((nav, idx) => {
         if (nav.authorized) {
           if (isAuthorized) {
             return (
               <GroupLink
                 key={nav.title}
-                {...{ ...nav, isAuthorized, setExpand, expand }}
+                {...{ ...nav, isAuthorized, setExpand, expand, idx }}
               />
             );
           }
@@ -193,7 +193,7 @@ export default function Sidebar() {
           return (
             <GroupLink
               key={nav.title}
-              {...{ ...nav, isAuthorized, setExpand, expand }}
+              {...{ ...nav, isAuthorized, setExpand, expand, idx }}
             />
           );
         }
@@ -218,10 +218,10 @@ const GroupLink = ({
       onClick={() => {
         if (!items?.length) return;
         if (idx === expand) {
-          setExpand?.(-1);
+          setExpand(-1);
           return;
         }
-        setExpand?.(idx);
+        setExpand(idx);
       }}
     >
       <Link

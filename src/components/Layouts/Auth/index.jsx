@@ -51,9 +51,10 @@ const AuthLayout = () => {
                 className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-gray-900 transition-all duration-200 rounded-lg hover:bg-gray-100"
               >
                 <img
+                  loading="lazy"
                   className="flex-shrink-0 object-cover w-6 h-6 mr-3 rounded-full"
                   src={user?.profilePic}
-                  alt=""
+                  alt={user?.name}
                 />
                 {user?.name}
                 <AnalyticsIcon />
