@@ -4,7 +4,7 @@ import Button from "../UI/Button";
 import React from "react";
 import BarIcon from "../../Icons/BarIcon";
 import XIcon from "../../Icons/XIcon";
-import { DEPARTMENT_PATH, ESTABLISHMENT_PATH } from "../../config";
+import { DEPARTMENT_PATH, ESTABLISHMENT_PATH, REPORT_PERMISSION_PATH } from "../../config";
 
 const menuList = [
   {
@@ -24,7 +24,7 @@ const menuList = [
     title: "Department",
   },
   {
-    href: "/report-permission",
+    href: REPORT_PERMISSION_PATH,
     title: "Report Permission",
   },
 ];

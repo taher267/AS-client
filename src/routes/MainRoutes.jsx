@@ -52,6 +52,9 @@ const NewReportPermission = Loadable(
 const SelfReportPermission = Loadable(
   lazy(() => import("../pages/ReportPermission/Self"))
 );
+const ObserveByReportPermission = Loadable(
+  lazy(() => import("../pages/ReportPermission/ObserveBy"))
+);
 
 const Holiday = Loadable(lazy(() => import("../pages/Holiday")));
 const NewHoliday = Loadable(lazy(() => import("../pages/Holiday/NewHoliday")));
@@ -96,10 +99,7 @@ const MainRoutes = {
       path: `${ESTABLISHMENT_PATH}${NEW_PATH}`,
       element: <NewEstablishment />,
     },
-    {
-      path: `${REPORT_PERMISSION_PATH}/self`,
-      element: <SelfReportPermission />,
-    },
+
     {
       path: DEPARTMENT_PATH,
       element: <Department />,
@@ -130,8 +130,16 @@ const MainRoutes = {
       element: <ReportPermission />,
     },
     {
+      path: `${REPORT_PERMISSION_PATH}/self`,
+      element: <SelfReportPermission />,
+    },
+    {
       path: `${REPORT_PERMISSION_PATH}${NEW_PATH}`,
       element: <NewReportPermission />,
+    },
+    {
+      path: `${REPORT_PERMISSION_PATH}${`/observe-by`}`,
+      element: <ObserveByReportPermission />,
     },
     {
       path: WORK_REPORT_PATH,
@@ -142,7 +150,7 @@ const MainRoutes = {
       path: `${WORK_REPORT_PATH}/self`,
       element: <SelfWorkReport />,
     },
-    
+
     {
       path: `${WORK_REPORT_PATH}/:id${REPORT_FORM_SUBMISSION_PATH}`,
       element: <WorkReportSubmission />,
