@@ -3,6 +3,7 @@ import DepartmentForm from "../HolidayForm";
 import { axiosPrivate } from "../../../api/axios";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
+import MultiSelect from "../../../components/UI/MultiSelectionForm";
 const NewDepartment = () => {
   const { manageAccessToken } = useAuth();
   const [limit, setLimit] = React.useState(100);
@@ -13,12 +14,12 @@ const NewDepartment = () => {
   React.useEffect(() => {
     (async () => {
       try {
-        setLoading(true);
-        const accessToken = await manageAccessToken();
-        const { data } = await axiosPrivate.get(`/holidays?limit=${limit}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-        setHolidays(data);
+        // setLoading(true);
+        // const accessToken = await manageAccessToken();
+        // const { data } = await axiosPrivate.get(`/holidays?limit=${limit}`, {
+        //   headers: { Authorization: `Bearer ${accessToken}` },
+        // });
+        // setHolidays(data);
       } catch (e) {
         console.log(e);
       } finally {
@@ -30,7 +31,7 @@ const NewDepartment = () => {
 
   const onSubmit = async (formData) => {
     try {
-      console.log(formData);
+      console.log(formData, "=================");
       return;
       setCreateLoading(true);
       const accessToken = await manageAccessToken();
@@ -76,19 +77,6 @@ const NewDepartment = () => {
                 // }}
                 loading={createLoading}
               />
-              {/* {loading ? (
-                <></>
-              ) : (
-                <DepartmentForm
-                  onSubmit={onSubmit}
-                  holidays={holidays?.data || []}
-                  // defaultValues={{
-                  //   name: "Taher",
-                  //   Holiday: "65808706e750347c2485ff24",
-                  // }}
-                  loading={createLoading}
-                />
-              )} */}
             </div>
           </div>
         </main>

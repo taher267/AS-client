@@ -7,26 +7,26 @@ import XIcon from "../../Icons/XIcon";
 import { DEPARTMENT_PATH, ESTABLISHMENT_PATH, REPORT_PERMISSION_PATH } from "../../config";
 
 const menuList = [
-  {
-    href: "/home",
-    title: "Home",
-  },
-  {
-    href: "/form",
-    title: "Form",
-  },
-  {
-    href: ESTABLISHMENT_PATH,
-    title: "Establishment",
-  },
-  {
-    href: DEPARTMENT_PATH,
-    title: "Department",
-  },
-  {
-    href: REPORT_PERMISSION_PATH,
-    title: "Report Permission",
-  },
+  // {
+  //   href: "/home",
+  //   title: "Home",
+  // },
+  // {
+  //   href: "/form",
+  //   title: "Form",
+  // },
+  // {
+  //   href: ESTABLISHMENT_PATH,
+  //   title: "Establishment",
+  // },
+  // {
+  //   href: DEPARTMENT_PATH,
+  //   title: "Department",
+  // },
+  // {
+  //   href: REPORT_PERMISSION_PATH,
+  //   title: "Report Permission",
+  // },
 ];
 
 const authMenuList = [

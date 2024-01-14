@@ -16,9 +16,10 @@ import DownAngleIcon from "../../../Icons/DownAngleIcon";
 import AnalyticsIcon from "../../../Icons/AnalyticsIcon";
 import cn from "../../../utils/cn";
 
-export default function Sidebar() {
+export default function () {
   const { isAuthorized } = useAuth();
   const [expand, setExpand] = React.useState(-1);
+  
   const dashboard = {
     authorized: false,
     title: "Dashboard",
@@ -37,6 +38,7 @@ export default function Sidebar() {
       },
     ],
   };
+
   const report_form = {
     authorized: true,
     title: "Report Form",
@@ -101,6 +103,11 @@ export default function Sidebar() {
         title: "Self",
         Icon: <AnalyticsIcon />,
         href: `${REPORT_PERMISSION_PATH}/self`,
+      },
+      {
+        title: "Observer By",
+        Icon: <AnalyticsIcon />,
+        href: `${REPORT_PERMISSION_PATH}/observe-by`,
       },
       {
         authorized: true,

@@ -1,6 +1,7 @@
 import React from "react";
 import Input from "../Input";
 import Select from "../Select";
+import ReactSelect from "react-select";
 import MultiInputList from "../MultiInputList";
 import stringToRHFRules from "../../../utils/validation/stringToRHFRules";
 
@@ -15,6 +16,7 @@ const RHFInput = ({
   multiple = false,
   inputErrors,
   selector = {},
+  closeMenuOnSelect = true,
   // className,
   ...restProps
 }) => {
@@ -72,23 +74,55 @@ const RHFInput = ({
           fieldState: { error },
           ...rest
         }) => {
+          const { className, style = {} } = restProps;
+          const opts = [];
+          const one = options?.[0];
+
+          for (const item of options) {
+            if (typeof item === "object") {
+              const label = item?.[selector?.label];
+              const value = item?.[selector?.value];
+              opts.push({ label, value, ...item });
+            } else {
+              opts.push({ label: item, value: item });
+            }
+          }
+
           return (
-            <Select
-              options={options}
-              {...field}
-              {...{
-                defaultValue,
-                multiple,
-                name,
-                selector,
-                ...restProps,
-                error: Boolean(error),
-                errMsg: error?.message,
-                inputRef: ref,
-                required: Boolean(rules?.required?.value),
+            <ReactSelect
+              isMulti={multiple}
+              {...{ options: opts, ...field, closeMenuOnSelect }}
+              styles={{
+                control: (baseStyles) => {
+                  return {
+                    ...baseStyles,
+                    borderColor: error ? "red" : "",
+                    ...style,
+                  };
+                },
+              }}
+              classNames={{
+                control: (state) => className || "",
               }}
             />
           );
+          // return (
+          //   <Select
+          //     options={options}
+          //     {...field}
+          //     {...{
+          //       defaultValue,
+          //       multiple,
+          //       name,
+          //       selector,
+          //       ...restProps,
+          //       error: Boolean(error),
+          //       errMsg: error?.message,
+          //       inputRef: ref,
+          //       required: Boolean(rules?.required?.value),
+          //     }}
+          //   />
+          // );
         }}
       />
     );
@@ -105,21 +139,14 @@ const RHFInput = ({
           fieldState: { error },
           ...rest
         }) => {
+          const opts = [];
+          for (const item of options) {
+            const label = item?.[selector.label];
+            const value = item?.[selector.value];
+            opts.push({ label, value, ...item });
+          }
           return (
-            <MultiInputList
-              options={options}
-              {...field}
-              {...{
-                ...restProps,
-                error: Boolean(error),
-                errMsg: error?.message,
-                inputRef: ref,
-              }}
-              // onChange={(data) => {
-              //   onChange(data);
-              //   return data;
-              // }}
-            />
+            <ReactSelect isMulti={multiple} {...{ onChange, options: opts }} />
           );
         }}
       />
@@ -160,3 +187,40 @@ const inputsTypes = [
   "url",
   "week",
 ];
+
+/**
+ * if (type === "select") {
+    return (
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          ...rules,
+        }}
+        render={({
+          field: { ref, ...field },
+          fieldState: { error },
+          ...rest
+        }) => {
+          return (
+            <Select
+              options={options}
+              {...field}
+              {...{
+                defaultValue,
+                multiple,
+                name,
+                selector,
+                ...restProps,
+                error: Boolean(error),
+                errMsg: error?.message,
+                inputRef: ref,
+                required: Boolean(rules?.required?.value),
+              }}
+            />
+          );
+        }}
+      />
+    );
+  }
+ */

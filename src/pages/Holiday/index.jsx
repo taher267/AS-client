@@ -32,6 +32,7 @@ const Department = () => {
       controller.abort();
     };
   }, []);
+
   const deleteItem = async (id) => {
     try {
       setDeleting(true);
