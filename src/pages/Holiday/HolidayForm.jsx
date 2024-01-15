@@ -26,7 +26,7 @@ export default function ({
             htmlFor=""
             className="block text-sm font-bold text-gray-900 sm:mt-px sm:pt-2"
           >
-            Weekend
+            Occasion
           </label>
           <div className="mt-2 sm:mt-0 sm:col-span-2">
             <RHFInput
@@ -35,6 +35,7 @@ export default function ({
               name="name"
               placeholder="Enter Department"
               defaultValue={defaultValues["name"] || ""}
+              multiple
             />
           </div>
         </div>

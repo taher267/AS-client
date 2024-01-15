@@ -4,6 +4,9 @@ import Select from "../Select";
 import ReactSelect from "react-select";
 import MultiInputList from "../MultiInputList";
 import stringToRHFRules from "../../../utils/validation/stringToRHFRules";
+import DatePicker from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
+// import classes from "./input.module.css";
 
 const RHFInput = ({
   type = "text",
@@ -26,10 +29,7 @@ const RHFInput = ({
     );
   }
   const rules = validation ? stringToRHFRules({ data: validation }) : {};
-  if (
-    //["text", "email", "password", "url"]
-    inputsTypes.includes(type)
-  ) {
+  if (inputsTypes.includes(type)) {
     return (
       <Controller
         name={name}
@@ -58,6 +58,49 @@ const RHFInput = ({
               // value={value || ""}
             />
           );
+        }}
+      />
+    );
+  } else if (type === "date") {
+    return (
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          ...rules,
+        }}
+        render={({
+          field: { value, ref, ...field },
+          fieldState: { error },
+          ...rest
+        }) => {
+          return (
+            <DatePicker
+              placeholder={restProps?.placeholder}
+              containerClassName="w-full"
+              inputClass="w-full p-2 border border-gray-300 rounded"
+              // format="YYYY-mm-ddTHH:mm:ssZ"
+              format="YYYY-mm-dd"
+              multiple={multiple}
+              plugins={[<DatePanel />]}
+            />
+          );
+          // return (
+          //   <Input
+          //     {...field}
+          //     {...{
+          //       name,
+          //       defaultValue,
+          //       error: Boolean(error),
+          //       errMsg: error?.message,
+          //       inputRef: ref,
+          //       type,
+          //       ...(rules?.required?.value ? { required: true } : {}),
+          //       ...restProps,
+          //     }}
+          //     // value={value || ""}
+          //   />
+          // );
         }}
       />
     );
@@ -166,7 +209,7 @@ const inputsTypes = [
   // "checkbox",
   // "button",
   "color",
-  "date",
+  // "date",
   "datetime-local",
   "email",
   // "file",
