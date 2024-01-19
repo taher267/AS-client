@@ -3,47 +3,44 @@ import DepartmentForm from "../HolidayForm";
 import { axiosPrivate } from "../../../api/axios";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
-import MultiSelect from "../../../components/UI/MultiSelectionForm";
+import { useNavigate } from "react-router-dom";
+import { HOLIDAY_PATH } from "../../../config";
+
 const NewDepartment = () => {
   const { manageAccessToken } = useAuth();
-  const [limit, setLimit] = React.useState(100);
-  const [loading, setLoading] = React.useState(false);
   const [createLoading, setCreateLoading] = React.useState(false);
-  const [holidays, setHolidays] = React.useState(null);
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    (async () => {
-      try {
-        // setLoading(true);
-        // const accessToken = await manageAccessToken();
-        // const { data } = await axiosPrivate.get(`/holidays?limit=${limit}`, {
-        //   headers: { Authorization: `Bearer ${accessToken}` },
-        // });
-        // setHolidays(data);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        // common work
-        setLoading(false);
-      }
-    })();
-  }, []);
+  React.useEffect(() => {}, []);
 
   const onSubmit = async (formData) => {
     try {
-      console.log(formData, "=================");
-      return;
+      let { occasional, weekly, name } = formData;
+      if (!occasional?.length && !weekly?.length) {
+        toast.error(`Please provide weekend or occasional holiday!`);
+        return;
+      }
+      const newObject = { name };
+      if (occasional?.length) {
+        newObject.occasional = occasional.map((item) =>
+          new Date(item).toISOString()
+        );
+      }
+      if (weekly?.length) {
+        newObject.weekly = weekly.map((item) =>
+          typeof item === "object" ? item.value : item
+        );
+      }
+      // console.log(newObject, "=================");
+      // return;
       setCreateLoading(true);
       const accessToken = await manageAccessToken();
-      const { data } = await axiosPrivate.post(
-        `/holidays`,
-        { ...formData },
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
+      const { data } = await axiosPrivate.post(`/holidays`, newObject, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       // setHolidays(data);
       toast.success(data.message);
+      navigate(HOLIDAY_PATH, { replace: true });
     } catch (e) {
       let msg = e?.response?.data?.message || e.message;
       toast.error(msg, { duration: 2000 });
@@ -53,6 +50,7 @@ const NewDepartment = () => {
       setCreateLoading(false);
     }
   };
+
   return (
     <div>
       <div className="flex flex-col flex-1 ">
@@ -70,11 +68,12 @@ const NewDepartment = () => {
               </div>
               <DepartmentForm
                 onSubmit={onSubmit}
-                holidays={holidays?.data || [{}]}
-                // defaultValues={{
-                //   name: "Taher",
-                //   Holiday: "65808706e750347c2485ff24",
-                // }}
+                // holidays={holidays?.data || [{}]}
+                defaultValues={{
+                  // occasional: ["2023-01-19"],
+                  // 2023-12-20T18:09:40.864+00:00
+                  weekly: [0, 1],
+                }}
                 loading={createLoading}
               />
             </div>

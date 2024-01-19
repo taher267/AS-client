@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "name": "Abu Taher",
+    "email": "abutaher267@gmail.com",
+    "url": ""
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

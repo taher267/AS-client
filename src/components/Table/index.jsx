@@ -152,7 +152,7 @@ const Table = ({
                                     key={`${item.id}${im.title}`}
                                     className="flex items-center"
                                   >
-                                    {item[im.field]}
+                                    {/* {item[im.field]?.toString?.()} */}
                                   </div>
                                 );
                             }
@@ -182,11 +182,11 @@ const Table = ({
                           } else {
                             return (
                               <td
-                                key={`${item.id}.${im.title}`}
+                                key={`${item.id}.${im.title?.toString?.()}`}
                                 className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
                               >
                                 <div className="flex items-center">
-                                  {item[im.field]}
+                                  {item[im.field]?.toString?.()}
                                 </div>
                               </td>
                             );

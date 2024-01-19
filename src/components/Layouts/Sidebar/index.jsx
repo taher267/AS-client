@@ -75,11 +75,11 @@ export default function () {
         Icon: <AnalyticsIcon />,
         href: HOLIDAY_PATH,
       },
-      {
-        title: "Self",
-        Icon: <AnalyticsIcon />,
-        href: `${HOLIDAY_PATH}/self`,
-      },
+      // {
+      //   title: "Self",
+      //   Icon: <AnalyticsIcon />,
+      //   href: `${HOLIDAY_PATH}/self`,
+      // },
       {
         authorized: true,
         title: "New",

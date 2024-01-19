@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
 import Table from "../../components/Table";
 import { Link } from "react-router-dom";
-import { WORK_REPORT_PATH, REPORT_FORM_SUBMISSION_PATH } from "../../config";
 
 const ObserveBy = () => {
   const { manageAccessToken } = useAuth();
@@ -21,7 +20,9 @@ const ObserveBy = () => {
       try {
         const accessToken = await manageAccessToken();
         const { data } = await axiosPrivate.get(
-          `report-permissions/observe-by`,
+          `report-permissions/observe-by?${new URLSearchParams({
+            expands: "user_id,report_form",
+          }).toString()}`,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
             signal,
@@ -81,18 +82,13 @@ const Action = ({ deleteItem, deleting, item }) => {
   };
   return (
     <div className="flex items-center space-x-4">
-      {/* <button
-        type="button"
-        className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Report Form
-      </button> */}
       <Link
         state={linkState}
-        to={`${WORK_REPORT_PATH}/${item?.id}${REPORT_FORM_SUBMISSION_PATH}`}
+        to={`#`}
+        // to={`${WORK_REPORT_PATH}/${item?.id}${REPORT_FORM_SUBMISSION_PATH}`}
         className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 transition-all duration-200 bg-gray-100 border border-gray-300 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none hover:text-white hover:border-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        Submisson
+        Report
       </Link>
       {/* <button
         onClick={() => {
@@ -132,12 +128,28 @@ const headers = {
       title: "ID",
       field: "id",
     },
-    // {
-    //   title: "Status",
-    //   field: "status",
-    // },
     {
-      title: <span className="sr-only"> Actions </span>,
+      title: "User",
+      field: "user_id",
+      render: ({ user_id: { name, id, profilePic } }) => (
+        <div className="xs:gap-3 sm:gap-2 items-center sm:flex">
+          <img
+            src={profilePic}
+            alt={name}
+            loading="lazy"
+            style={{ borderRadius: "50%", height: "35px", width: "35px" }}
+          />
+          <div>
+            <h4>{name}</h4>
+            <p className="text-gray-400">{id}</p>
+          </div>
+        </div>
+      ),
+    },
+    //
+
+    {
+      title: <span className="sr-only">Actions </span>,
       className: "",
     },
   ],

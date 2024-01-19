@@ -4,8 +4,9 @@ import Select from "../Select";
 import ReactSelect from "react-select";
 import MultiInputList from "../MultiInputList";
 import stringToRHFRules from "../../../utils/validation/stringToRHFRules";
-import DatePicker from "react-multi-date-picker";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import cn from "../../../utils/cn";
 // import classes from "./input.module.css";
 
 const RHFInput = ({
@@ -70,20 +71,55 @@ const RHFInput = ({
           ...rules,
         }}
         render={({
-          field: { value, ref, ...field },
+          field: { value, ref, onChange, ...field },
           fieldState: { error },
-          ...rest
+          // ...rest
         }) => {
+          const valueSetter = ({ values, isMultiple }) => {
+            if (isMultiple) {
+              if (typeof values === "object" && values?.length) {
+                return values?.map?.((item) => new Date(item)) || [];
+              } else if (values) {
+                return new Date(values);
+              }
+            } else {
+              if (typeof values === "object" && values?.length) {
+                return new Date(values[0]);
+              } else if (values) {
+                return new Date(values);
+              }
+            }
+          };
           return (
-            <DatePicker
-              placeholder={restProps?.placeholder}
-              containerClassName="w-full"
-              inputClass="w-full p-2 border border-gray-300 rounded"
-              // format="YYYY-mm-ddTHH:mm:ssZ"
-              format="YYYY-mm-dd"
-              multiple={multiple}
-              plugins={[<DatePanel />]}
-            />
+            <>
+              <DatePicker
+                placeholder={restProps?.placeholder}
+                containerClassName={cn("w-full", {
+                  "border-red-500": Boolean(error),
+                })}
+                inputClass={cn("w-full p-2 border border-gray-300 rounded", {
+                  "border-red-500": Boolean(error),
+                })}
+                // format="YYYY-mm-ddTHH:mm:ssZ"
+                format="YYYY-MM-DD"
+                // multiple={multiple}
+                plugins={[<DatePanel />]}
+                {...field}
+                value={
+                  value === undefined && defaultValue
+                    ? valueSetter({
+                        values: defaultValue,
+                        isMultiple: multiple,
+                      })
+                    : valueSetter({ values: value, isMultiple: multiple })
+                }
+                onChange={(_, { validatedValue }) => onChange(validatedValue)}
+              />
+              {(error && (
+                <p className="text-red-500 text-base">{error.message}</p>
+              )) ||
+                ""}
+            </>
           );
           // return (
           //   <Input
@@ -113,7 +149,7 @@ const RHFInput = ({
           ...rules,
         }}
         render={({
-          field: { ref, ...field },
+          field: { ref, value, ...field },
           fieldState: { error },
           ...rest
         }) => {
@@ -132,22 +168,37 @@ const RHFInput = ({
           }
 
           return (
-            <ReactSelect
-              isMulti={multiple}
-              {...{ options: opts, ...field, closeMenuOnSelect }}
-              styles={{
-                control: (baseStyles) => {
-                  return {
-                    ...baseStyles,
-                    borderColor: error ? "red" : "",
-                    ...style,
-                  };
-                },
-              }}
-              classNames={{
-                control: (state) => className || "",
-              }}
-            />
+            <>
+              <ReactSelect
+                isMulti={multiple}
+                {...{ options: opts, ...field, closeMenuOnSelect }}
+                styles={{
+                  control: (baseStyles) => {
+                    return {
+                      ...baseStyles,
+                      borderColor: error ? "red" : "",
+                      ...style,
+                    };
+                  },
+                }}
+                classNames={{
+                  control: (state) => className || "",
+                }}
+                defaultValue={
+                  defaultValue
+                    ? defaultValueSetter({
+                        defaultOptions: defaultValue,
+                        OPTIONS: opts,
+                        isMultiple: multiple,
+                      })
+                    : ``
+                }
+              />
+              {(error && (
+                <p className="text-red-500 text-base">{error.message}</p>
+              )) ||
+                ""}
+            </>
           );
           // return (
           //   <Select
@@ -267,3 +318,39 @@ const inputsTypes = [
     );
   }
  */
+
+const defaultValueSetter = ({
+  isMultiple = false,
+  defaultOptions,
+  OPTIONS = [],
+}) => {
+  // const optionsVals = OPTIONS.map((item) => item.value);
+  if (isMultiple) {
+    if (Array.isArray(defaultOptions)) {
+      const vals = defaultOptions.map((item) => item?.value || item);
+      const filtered = OPTIONS.filter((item) => {
+        if (typeof item === "object") {
+          if (vals.includes(item?.value)) {
+            return true;
+          }
+          return false;
+        } else if (vals.includes(item?.value)) {
+          return true;
+        }
+        return false;
+      });
+
+      return filtered;
+    } else if (typeof defaultOptions === "object") {
+      return OPTIONS.filter((item) => item.value === defaultOptions?.value)[0];
+    } else if (defaultOptions) {
+      return OPTIONS.filter((item) => item.value === defaultOptions)[0];
+    } else return "";
+  } else if (defaultOptions) {
+    if (typeof defaultOptions === "object") {
+      return OPTIONS.filter((item) => item.value === defaultOptions?.value)[0];
+    } else if (defaultOptions) {
+      return OPTIONS.filter((item) => item.value === defaultOptions)[0];
+    } else return "";
+  }
+};
