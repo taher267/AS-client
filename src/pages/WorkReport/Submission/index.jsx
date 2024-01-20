@@ -20,7 +20,7 @@ const Submission = () => {
   const [loading, setLoading] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
 
-  const form_fields = permitedForm?.data?.report_form?.fields;
+  const form_fields = permitedForm?.data?.report_form_id?.fields;
   //   console.log(permitedForm?.data?.open_submission_date);
 
   React.useEffect(() => {
@@ -59,6 +59,7 @@ const Submission = () => {
     };
   }, [location?.state?.id, permited_id]);
   // console.log(new Date().toISOString())
+
   const onSubmit = async (form_data, reset) => {
     try {
       const validationCheck = keyValueValidation({
@@ -91,6 +92,7 @@ const Submission = () => {
       toast.error(msg);
     }
   };
+
   return (
     <div>
       <div className="flex flex-col flex-1 ">
@@ -103,9 +105,10 @@ const Submission = () => {
               <div className="mt-6">
                 {/* <p className="text-base font-bold text-gray-900">Profile</p> */}
                 <p className="mt-1 text-sm font-medium text-gray-500">
-                  Lorem ipsum dolor sit amet, consectetur adipis.
+                  Work report Submission form!
                 </p>
               </div>
+              {console.log(permitedForm, "permitedForm")}
               {!loading && form_fields?.length && (
                 <SimpleForm
                   {...{

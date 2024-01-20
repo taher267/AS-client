@@ -16,6 +16,7 @@ export default function ({
   set_error_ref,
   mode = "all",
 }) {
+  console.log(defaultValues);
   const {
     handleSubmit,
     reset,
