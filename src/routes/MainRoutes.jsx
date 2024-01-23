@@ -16,6 +16,7 @@ import {
 } from "../config";
 import AuthGuard from "../utils/route-guard/AuthGuard";
 import Loadable from "../components/Loadable";
+import NotFound from "../pages/Error/404";
 
 const Dashboard = Loadable(lazy(() => import("../components/Dashboard")));
 const Home = Loadable(lazy(() => import("../components/Home")));
@@ -43,6 +44,7 @@ const WorkReportSubmission = Loadable(
   lazy(() => import("../pages/WorkReport/Submission"))
 );
 const SelfWorkReport = Loadable(lazy(() => import("../pages/WorkReport/Self")));
+const WorkReport = Loadable(lazy(() => import("../pages/WorkReport")));
 const ReportPermission = Loadable(
   lazy(() => import("../pages/ReportPermission"))
 );
@@ -55,11 +57,12 @@ const SelfReportPermission = Loadable(
 const ObserveByReportPermission = Loadable(
   lazy(() => import("../pages/ReportPermission/ObserveBy"))
 );
-
+const SingleReportPermissionWorkReport = Loadable(
+  lazy(() => import("../pages/WorkReport/SingleReportPermissionWorkReport"))
+);
 const Holiday = Loadable(lazy(() => import("../pages/Holiday")));
 const NewHoliday = Loadable(lazy(() => import("../pages/Holiday/NewHoliday")));
-const WorkReport = Loadable(lazy(() => import("../pages/WorkReport")));
-import NotFound from "../pages/Error/404";
+
 // const NotFound = Loadable(lazy(() => import("../pages/Error/404")));
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -120,7 +123,6 @@ const MainRoutes = {
       path: `${REPORT_FORM_PATH}${NEW_PATH}`,
       element: <NewReportForm />,
     },
-
     {
       path: `${REPORT_FORM_PATH}/self`,
       element: <SelfReportForm />,
@@ -141,19 +143,22 @@ const MainRoutes = {
       path: `${REPORT_PERMISSION_PATH}${`/observe-by`}`,
       element: <ObserveByReportPermission />,
     },
+
     {
       path: WORK_REPORT_PATH,
       element: <WorkReport />,
     },
-
     {
       path: `${WORK_REPORT_PATH}/self`,
       element: <SelfWorkReport />,
     },
-
     {
       path: `${WORK_REPORT_PATH}/:id${REPORT_FORM_SUBMISSION_PATH}`,
       element: <WorkReportSubmission />,
+    },
+    {
+      path: `${WORK_REPORT_PATH}/report-permission/:report_prmission_id/report-form/:report_form_id`,
+      element: <SingleReportPermissionWorkReport />,
     },
     {
       path: HOLIDAY_PATH,
