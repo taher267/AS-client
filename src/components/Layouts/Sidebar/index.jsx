@@ -19,7 +19,7 @@ import cn from "../../../utils/cn";
 export default function () {
   const { isAuthorized } = useAuth();
   const [expand, setExpand] = React.useState(-1);
-  
+
   const dashboard = {
     authorized: false,
     title: "Dashboard",
@@ -31,6 +31,11 @@ export default function () {
     Icon: DownAngleIcon,
     href: "#", // WORK_REPORT_PATH,
     items: [
+      {
+        title: "All",
+        Icon: <AnalyticsIcon />,
+        href: `${WORK_REPORT_PATH}`,
+      },
       {
         title: "Self",
         Icon: <AnalyticsIcon />,

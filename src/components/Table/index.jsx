@@ -135,7 +135,9 @@ const Table = ({
                   {dataItems?.map((item, idx) => (
                     <tr key={idx} className="bg-white">
                       <td className="px-4 py-4 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
-                        <div>{item[headers.items[0].field]}</div>
+                        <div className="text-center">
+                          {item[headers.items[0].field]}
+                        </div>
                         <div className="mt-1 space-y-2 font-medium pl-11 lg:hidden">
                           {headers?.items?.map?.((im, k) => {
                             if (k !== 0) {
@@ -150,14 +152,14 @@ const Table = ({
                                 return (
                                   <div
                                     key={`${item.id}${im.title}`}
-                                    className="flex items-center"
+                                    className="flex items-center justify-center"
                                   >
-                                    {/* {item[im.field]?.toString?.()} */}
+                                    {item[im.field]?.toString?.()}
                                   </div>
                                 );
                             }
                           })}
-                          <div className="flex items-center pt-3 space-x-4">
+                          <div className="flex items-center pt-3 space-x-4 justify-center">
                             {Action ? (
                               <Action {...{ deleteItem, deleting, item }} />
                             ) : (
