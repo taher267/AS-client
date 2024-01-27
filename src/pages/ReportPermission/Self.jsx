@@ -13,6 +13,8 @@ const Self = () => {
   const { manageAccessToken } = useAuth();
   const [allSelfReportPermission, setAllSelfReportPermission] =
     React.useState();
+  const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(10);
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -20,10 +22,17 @@ const Self = () => {
     (async () => {
       try {
         const accessToken = await manageAccessToken();
-        const { data } = await axiosPrivate.get(`report-permissions/self`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-          signal,
-        });
+        const { data } = await axiosPrivate.get(
+          `report-permissions/self?${new URLSearchParams({
+            page,
+            limit,
+            expands: "observer,report_form",
+          })}`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+            signal,
+          }
+        );
         setAllSelfReportPermission(data);
       } catch (err) {
         const msg = err.response?.data?.message || err.message;
@@ -129,10 +138,30 @@ const headers = {
       title: "ID",
       field: "id",
     },
-    // {
-    //   title: "Status",
-    //   field: "status",
-    // },
+    {
+      title: "Observer",
+      // field: "observer",
+      render: ({ observer }) => {
+        if (!observer) return null;
+        return (
+          <div className="flex items-center gap-3">
+            <div>
+              <img
+                width={35}
+                height={35}
+                src={observer?.profilePic}
+                alt={observer?.name}
+                style={{ borderRadius: "50%" }}
+              />
+            </div>
+            <div>
+              <p>{observer?.name}</p>
+              <p>{observer?.email}</p>
+            </div>
+          </div>
+        );
+      },
+    },
     {
       title: <span className="sr-only"> Actions </span>,
       className: "",

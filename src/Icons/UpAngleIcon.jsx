@@ -15,8 +15,8 @@ export default function UpAngleIcon({ className, ...props }) {
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       {...props}
     >
       <circle cx="12" cy="5" r="2" />
