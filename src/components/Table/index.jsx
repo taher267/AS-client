@@ -50,14 +50,15 @@ const Table = ({
 }) => {
   // console.log(dataItems);
   return (
-    <div className="py-12 bg-white sm:py-16 lg:py-20">
+    <div className="py-12 bg-white">
+       {/* sm:py-16 lg:py-20 */}
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div>
-            <p className="text-xl font-bold text-gray-900">Customers</p>
+            {/* <p className="text-xl font-bold text-gray-900">Customers</p>
             <p className="mt-1 text-sm font-medium text-gray-500">
               Lorem ipsum dolor sit amet, consectetur adipis.
-            </p>
+            </p> */}
           </div>
           <div className="flex items-center justify-start mt-4 sm:justify-end sm:mt-0 sm:space-x-7">
             <button

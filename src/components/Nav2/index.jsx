@@ -4,7 +4,11 @@ import Button from "../UI/Button";
 import React from "react";
 import BarIcon from "../../Icons/BarIcon";
 import XIcon from "../../Icons/XIcon";
-import { DEPARTMENT_PATH, ESTABLISHMENT_PATH, REPORT_PERMISSION_PATH } from "../../config";
+import {
+  DEPARTMENT_PATH,
+  ESTABLISHMENT_PATH,
+  REPORT_PERMISSION_PATH,
+} from "../../config";
 
 const menuList = [
   // {
@@ -39,7 +43,7 @@ const authMenuList = [
     title: "Sign in",
   },
 ];
-
+const Panzabidotcom = `https://cdn-dgfbd.nitrocdn.com/QZthSVawRBMIXGeeGCWJNaGUxdONZNHM/assets/images/optimized/rev-7a55f82/wp-content/uploads/2020/11/cropped-panjabi-logo.png`;
 const Nav2 = () => {
   const [show, setShow] = React.useState(false);
   const { user, logout } = useAuth();
@@ -50,19 +54,17 @@ const Nav2 = () => {
         <nav className="relative flex items-center justify-between h-16 bg-white lg:rounded-md lg:shadow-lg lg:h-24 lg:px-8 lg:py-6">
           <div className="flex-shrink-0">
             <Link to="#" title="" className="flex">
-              <img
-                className="w-auto h-8 lg:h-10"
-                src="https://cdn.rareblocks.xyz/collection/celebration/images/logo.svg"
-                alt=""
-              />
+              <img className="w-auto h-8 lg:h-10" src={Panzabidotcom} alt="" />
             </Link>
           </div>
-          <Button
-            onClick={() => setShow((s) => !s)}
-            className="inline-flex p-2 ml-5 text-black transition-all duration-200 rounded-md lg:hidden bg-transparent focus:bg-gray-100 hover:bg-gray-100"
-          >
-            {show ? <XIcon /> : <BarIcon />}
-          </Button>
+          <div>
+            <Button
+              onClick={() => setShow((s) => !s)}
+              className="inline-flex p-2 ml-5 text-black transition-all duration-200 rounded-md lg:hidden bg-transparent focus:bg-gray-100 hover:bg-gray-100"
+            >
+              {show ? <XIcon /> : <BarIcon />}
+            </Button>
+          </div>
           <div className="hidden ml-10 lg:flex lg:items-center lg:mr-auto lg:space-x-10">
             {menuList.map((menu) => (
               <Link
@@ -105,7 +107,7 @@ const Nav2 = () => {
         <nav
           className={`${
             show ? "flex" : "hidden"
-          } transition duration-300 flex-col py-4 space-y-2 lg:hidden`}
+          } transition duration-300 flex-col py-4 space-y-2 lg:hidden text-right`}
         >
           {menuList.map((menu) => (
             <Link
@@ -117,8 +119,8 @@ const Nav2 = () => {
             </Link>
           ))}
           {user ? (
-            <div>
-              <Button className="inline max-w-xs" onClick={logout}>
+            <div className="text-right">
+              <Button className="inline max-w-xs w-25" onClick={logout}>
                 Logout
               </Button>
               <div className="flex items-center gap-2 mt-2">

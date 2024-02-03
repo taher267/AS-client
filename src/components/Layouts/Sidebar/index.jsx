@@ -15,30 +15,40 @@ import { useAuth } from "../../../context/AuthContext";
 import DownAngleIcon from "../../../Icons/DownAngleIcon";
 import AnalyticsIcon from "../../../Icons/AnalyticsIcon";
 import cn from "../../../utils/cn";
+import CubeIcon from "../../../Icons/CubeIcon";
+import classes from "./sidebar.module.css";
+import DocumentIcon from "../../../Icons/DocumentIcon";
+import TableIcon from "../../../Icons/TableIcon";
+import BellSlashIcon from "../../../Icons/BellSlashIcon";
+import HandRaisedIcon from "../../../Icons/HandRaisedIcon";
+import WindowIcon from "../../../Icons/WindowIcon";
+import BuildingIcon from "../../../Icons/buildingIcon";
+import UsersIcon from "../../../Icons/UsersIcon";
 
 export default function () {
-  const { isAuthorized } = useAuth();
+  const { isAuthorized, isObserved } = useAuth();
   const [expand, setExpand] = React.useState(-1);
 
   const dashboard = {
     authorized: false,
     title: "Dashboard",
-    Icon: DownAngleIcon,
+    Icon: CubeIcon,
     href: DASHBOARD_PATH,
   };
   const work_report = {
     title: "Work Report",
-    Icon: DownAngleIcon,
+    Icon: DocumentIcon,
     href: "#", // WORK_REPORT_PATH,
     items: [
       {
+        authorized: true,
         title: "All",
-        Icon: <AnalyticsIcon />,
+        // Icon: <DocumentIcon />,
         href: `${WORK_REPORT_PATH}`,
       },
       {
         title: "Self",
-        Icon: <AnalyticsIcon />,
+        // Icon: <AnalyticsIcon />,
         href: `${WORK_REPORT_PATH}/self`,
       },
     ],
@@ -47,7 +57,7 @@ export default function () {
   const report_form = {
     authorized: true,
     title: "Report Form",
-    Icon: DownAngleIcon,
+    Icon: TableIcon,
     // href: REPORT_FORM_PATH,
     items: [
       {
@@ -71,7 +81,7 @@ export default function () {
   };
   const holiday = {
     title: "Holiday",
-    Icon: DownAngleIcon,
+    Icon: BellSlashIcon,
     // href: HOLIDAY_PATH,
     items: [
       {
@@ -95,7 +105,7 @@ export default function () {
   };
   const report_permission = {
     title: "Report Permission",
-    Icon: DownAngleIcon,
+    Icon: HandRaisedIcon,
     // href: REPORT_PERMISSION_PATH,
     items: [
       {
@@ -110,6 +120,7 @@ export default function () {
         href: `${REPORT_PERMISSION_PATH}/self`,
       },
       {
+        authorized: !isObserved,
         title: "Observer By",
         Icon: <AnalyticsIcon />,
         href: `${REPORT_PERMISSION_PATH}/observe-by`,
@@ -122,37 +133,14 @@ export default function () {
       },
     ],
   };
-  const commonNavLists = [
-    dashboard,
-    work_report,
-    report_form,
-    holiday,
-    report_permission,
-  ];
+  const commonNavLists = [report_form, holiday, report_permission, work_report];
 
   const authNavlink = [
-    {
-      authorized: true,
-      title: "User", //ADMIN PROTECTED
-      Icon: DownAngleIcon,
-      // href: USER_PATH,
-      items: [
-        {
-          title: "All",
-          Icon: <AnalyticsIcon />,
-          href: USER_PATH,
-        },
-        {
-          title: "New",
-          Icon: <AnalyticsIcon />,
-          href: `${USER_PATH}${NEW_PATH}`,
-        },
-      ],
-    },
+    dashboard,
     {
       authorized: true,
       title: "Establistment", //ADMIN PROTECTED
-      Icon: DownAngleIcon,
+      Icon: BuildingIcon,
       // href: ESTABLISHMENT_PATH,
       items: [
         {
@@ -171,7 +159,7 @@ export default function () {
     {
       authorized: true,
       title: "Department", //ADMIN PROTECTED
-      Icon: DownAngleIcon,
+      Icon: WindowIcon,
       // href: DEPARTMENT_PATH,
       items: [
         {
@@ -186,8 +174,26 @@ export default function () {
         },
       ],
     },
+    {
+      authorized: true,
+      title: "User", //ADMIN PROTECTED
+      Icon: UsersIcon,
+      // href: USER_PATH,
+      items: [
+        {
+          title: "All",
+          Icon: <AnalyticsIcon />,
+          href: USER_PATH,
+        },
+        {
+          title: "New",
+          Icon: <AnalyticsIcon />,
+          href: `${USER_PATH}${NEW_PATH}`,
+        },
+      ],
+    },
   ];
-  const navList = [...commonNavLists, ...authNavlink]; // ...(isAuthorized ? authNavlink : [])
+  const navList = [...authNavlink, ...commonNavLists]; // ...(isAuthorized ? authNavlink : [])
 
   return (
     <>
@@ -238,11 +244,17 @@ const GroupLink = ({
     >
       <Link
         to={href || "#"}
-        className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group"
+        className={`flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-300 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group ${classes.pz_sidebar_link}`}
       >
-        <AnalyticsIcon />
+        {(Icon && (
+          <Icon
+            className="mr-1 text-sky-700 
+          "
+          />
+        )) ||
+          ""}
         {title}
-        {(Icon && <Icon className={{ "rotate-180": expand === idx }} />) || ""}
+        <DownAngleIcon className={{ "rotate-180": expand === idx }} />
       </Link>
     </div>
     <div
@@ -262,12 +274,12 @@ const GroupLink = ({
     <hr className="border-gray-200" />
   </div>
 );
-const LINK = ({ href, title }) => (
+const LINK = ({ href, title, Icon }) => (
   <Link
     to={href}
     className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group"
   >
-    <AnalyticsIcon />
+    {Icon}
     {title}
   </Link>
 );

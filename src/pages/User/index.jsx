@@ -3,11 +3,21 @@ import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { axiosPrivate } from "../../api/axios";
 import Table from "../../components/Table";
+import ReactSelect from "react-select";
+import { USER_STATUSES } from "../../config";
+import LoadingIcon from "../../Icons/LoadingIcon";
+import Pagination from "../../components/Pagination";
 
 const User = () => {
   const { manageAccessToken } = useAuth();
   const [allUsers, setAllUsers] = React.useState({});
   const [deleting, setDeleting] = React.useState(false);
+  const [editLoading, setEditLoading] = React.useState(false);
+  const [editId, setEditId] = React.useState(null);
+  const [page, setPage] = React.useState(1);
+  const [limit] = React.useState(10);
+  const [loading, setLoading] = React.useState(false);
+  const [initLoad, setInitLoad] = React.useState(null); //init, up, down
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -15,27 +25,40 @@ const User = () => {
     (async () => {
       try {
         const accessToken = await manageAccessToken();
-        const { data } = await axiosPrivate.get(`users`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-          signal,
-        });
+        if (initLoad === null) {
+          setInitLoad(true);
+        }
+        setLoading(true);
+        const { data } = await axiosPrivate.get(
+          `users?${new URLSearchParams({ page, limit })}`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+            signal,
+          }
+        );
         setAllUsers(data);
       } catch (err) {
         const msg = err.response?.data?.message || err.message;
         toast.error(msg);
         console.log(err);
+      } finally {
+        setLoading(false);
+        setInitLoad(false);
       }
     })();
+
     return () => {
       // Cancel the request when the component unmounts
       controller.abort();
+      setLoading(false);
     };
-  }, []);
+  }, [page]);
+
   const deleteItem = async (id) => {
     try {
       setDeleting(true);
       const accessToken = await manageAccessToken();
-      const { data } = await axiosPrivate.delete(`/Users/${id}`, {
+      const { data } = await axiosPrivate.delete(`/users/${id}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       // setEstablishments(data);
@@ -48,6 +71,124 @@ const User = () => {
       // common work
       setDeleting(false);
     }
+  };
+  const updateItemWithPatch = async ({ updateData = {}, id }) => {
+    try {
+      setEditId(id);
+
+      if (!id || !Object.keys(updateData || {}).length) {
+        console.log(editId, updateData);
+        toast.error(`Update data missing!`);
+        return;
+      }
+
+      setEditLoading(true);
+      const accessToken = await manageAccessToken();
+      const {
+        data: { data: updatedData },
+      } = await axiosPrivate.patch(`/users/${id}`, updateData, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setAllUsers((p) => {
+        const copy = JSON.parse(JSON.stringify(p));
+        copy.data = copy.data.map((item) => {
+          if (item.id === updatedData.id) {
+            return updatedData;
+          }
+          return item;
+        });
+        return copy;
+      });
+      toast.success(`User has been updated!`);
+    } catch (e) {
+      let msg = e?.response?.data?.message || e.message;
+      toast.error(msg, { duration: 2000 });
+      console.log(e);
+    } finally {
+      setEditId(null);
+      setEditLoading(false);
+    }
+  };
+
+  const headers = React.useMemo(() => {
+    return {
+      className:
+        "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
+      items: [
+        {
+          title: "Name",
+          field: "name",
+        },
+        {
+          title: "Email",
+          field: "email",
+        },
+        {
+          title: "Username",
+          field: "username",
+        },
+        {
+          title: "Phone number",
+          field: "phone_number",
+        },
+        {
+          title: "Profile Pic",
+          field: "profilePic",
+          render: ({ profilePic, name }) => (
+            <div>
+              {profilePic ? (
+                <img
+                  src={profilePic}
+                  alt={name}
+                  className="w-[32px] rounded-[50%]"
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          ),
+        },
+        {
+          title: "Status",
+          field: "status",
+          render: ({ status, id }) => {
+            const options = USER_STATUSES.map((sts) => ({
+              value: sts,
+              label: sts,
+            }));
+            return (
+              <div className="flex items-center gap-2">
+                <ReactSelect
+                  isDisabled={Boolean(editId)}
+                  defaultValue={{ value: status, label: status }}
+                  options={options}
+                  onChange={(changed) => {
+                    if (status === changed.value) return;
+                    const requestObj = {
+                      updateData: { status: changed.value },
+                      id,
+                    };
+                    updateItemWithPatch(requestObj);
+                  }}
+                />
+                {(editLoading && editId === id && <LoadingIcon />) || ""}
+              </div>
+            );
+          },
+        },
+        {
+          title: <span className="sr-only"> Actions </span>,
+          className: "",
+
+          //     <th className="relative py-3.5 pl-4 pr-4 md:pr-0">
+          //     <span className="sr-only"> Actions </span>
+          //   </th>
+        },
+      ],
+    };
+  }, [editId]);
+  const handlePage = (_page) => {
+    setPage(_page);
   };
   return (
     <div>
@@ -64,14 +205,23 @@ const User = () => {
                   Lorem ipsum dolor sit amet, consectetur adipis.
                 </p>
               </div>
-              <Table
-                {...{
-                  headers,
-                  dataItems: allUsers?.data || [],
-                  // deleteItem,
-                  deleting,
-                }}
-              />
+              {(initLoad === false && allUsers?.data?.length && (
+                <Table
+                  {...{
+                    headers,
+                    dataItems: allUsers?.data || [],
+                    // deleteItem,
+                    deleting,
+                  }}
+                />
+              )) ||
+                ""}
+              {(initLoad === false && allUsers?.pagination?.totalPage > 1 && (
+                <Pagination
+                  {...{ ...allUsers?.pagination, handlePage, loading }}
+                />
+              )) ||
+                ""}
             </div>
           </div>
         </main>
@@ -81,42 +231,3 @@ const User = () => {
 };
 
 export default User;
-
-const headers = {
-  className:
-    "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
-  items: [
-    {
-      title: "Name",
-      field: "name",
-    },
-    {
-      title: "Email",
-      field: "email",
-    },
-    {
-      title: "Username",
-      field: "username",
-    },
-    {
-      title: "Phone number",
-      field: "phone_number",
-    },
-    {
-      title: "Profile Pic",
-      field: "profilePic",
-    },
-    {
-      title: "Status",
-      field: "status",
-    },
-    {
-      title: <span className="sr-only"> Actions </span>,
-      className: "",
-
-      //     <th className="relative py-3.5 pl-4 pr-4 md:pr-0">
-      //     <span className="sr-only"> Actions </span>
-      //   </th>
-    },
-  ],
-};

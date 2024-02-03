@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
 import {
   ADMIN_ROLES,
-  DASHBOARD_PATH,
+  // DASHBOARD_PATH,
   HOME_PATH,
+  OBSERVER_ROLES,
   SIGNIN_PATH,
 } from "../../config";
 import { jwtDecode } from "jwt-decode";
@@ -19,6 +20,7 @@ const initialState = {
   authErr: null,
   isAuthenticated: false,
   isAuthorized: false,
+  isObserved: false,
 };
 
 export const ACTIONS = {
@@ -33,31 +35,39 @@ export const ACTIONS = {
   REDUCE_CREDITS: "REDUCE_CREDITS",
   UPDATE_USER: "UPDATE_USER",
 };
-const userIsAuthorize = ({ roles = [], permissions = ADMIN_ROLES || [] }) => {
-  let isAuthorized = false;
-  if (!roles?.length || !permissions?.length) return isAuthorized;
+
+const userIsPermitted = ({ roles = [], permissions = ADMIN_ROLES || [] }) => {
+  let isPermitted = false;
+  if (!roles?.length || !permissions?.length) return isPermitted;
   for (const permission of permissions || []) {
     if (roles?.includes(permission)) {
-      isAuthorized = true;
+      isPermitted = true;
       break;
     }
   }
-  return isAuthorized;
+  return isPermitted;
 };
+
+// isObserved
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.LOGIN:
       const payload = action.payload;
 
-      const isAuthorized = userIsAuthorize({
+      const isAuthorized = userIsPermitted({
         roles: payload?.user?.roles || [],
         permissions: ADMIN_ROLES,
+      });
+      const isObserved = userIsPermitted({
+        roles: payload?.user?.roles || [],
+        permissions: OBSERVER_ROLES,
       });
       return {
         ...state,
         ...payload,
         isAuthenticated: true,
         isAuthorized,
+        isObserved,
       };
 
     case ACTIONS.LOADING_START:
@@ -93,6 +103,7 @@ function reducer(state, action) {
       return state;
   }
 }
+
 export const AuthContext = React.createContext({});
 
 export const AuthProvider = ({ children }) => {
