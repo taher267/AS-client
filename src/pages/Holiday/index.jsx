@@ -51,9 +51,10 @@ const Department = () => {
       setDeleting(false);
     }
   };
+
   return (
     <div>
-      <div className="flex flex-col flex-1 ">
+      <div className="flex flex-col flex-1">
         <main>
           <div className="py-6">
             <div className="px-4 mx-auto sm:px-6 md:px-8">
@@ -96,13 +97,7 @@ const headers = {
       field: "weekly",
       render: ({ weekly }) => {
         return (
-          <div>
-            {/* {weekly?.map((item) => (
-              <span key={item}>{zeroSixByDaysName(item)}</span>
-            ))} */}
-
-            {weekly?.map((item) => zeroSixByDaysName(item)).join(", ")}
-          </div>
+          <div>{weekly?.map((item) => zeroSixByDaysName(item)).join(", ")}</div>
         );
       },
     },

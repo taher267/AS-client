@@ -135,7 +135,7 @@ const Table = ({
                 <tbody>
                   {dataItems?.map((item, idx) => (
                     <tr key={idx} className="bg-white">
-                      <td className="px-4 py-4 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
+                      <td className="py-3 text-sm font-bold text-gray-900 align-top lg:align-middle whitespace-nowrap">
                         <div className="text-center">
                           {item[headers.items[0].field]}
                         </div>
@@ -177,7 +177,7 @@ const Table = ({
                             return (
                               <td
                                 key={`${item.id}.${im.title}`}
-                                className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
+                                className="hidden py-3 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
                               >
                                 {im.render?.(item)}
                               </td>
@@ -186,7 +186,7 @@ const Table = ({
                             return (
                               <td
                                 key={`${item.id}.${im.title?.toString?.()}`}
-                                className="hidden px-4 py-4 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
+                                className="hidden py-3 text-sm font-medium text-gray-900 lg:table-cell whitespace-nowrap"
                               >
                                 <div className="flex items-center">
                                   {item[im.field]?.toString?.()}
@@ -197,7 +197,7 @@ const Table = ({
                         }
                       })}
 
-                      <td className="hidden px-4 py-4 lg:table-cell whitespace-nowrap">
+                      <td className="hidden py-3 lg:table-cell whitespace-nowrap">
                         {Action ? (
                           <Action {...{ deleteItem, deleting, item }} />
                         ) : (

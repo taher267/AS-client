@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import Table from "../../components/Table";
 import { Link } from "react-router-dom";
 import { WORK_REPORT_PATH, REPORT_FORM_SUBMISSION_PATH } from "../../config";
+import zeroSixByDaysName from "../../utils/zero-six-by-days-name";
 
 const Self = () => {
   const { manageAccessToken } = useAuth();
@@ -26,7 +27,7 @@ const Self = () => {
           `report-permissions/self?${new URLSearchParams({
             page,
             limit,
-            expands: "observer,report_form",
+            expands: "observer,report_form,holiday",
           })}`,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -137,6 +138,34 @@ const headers = {
     {
       title: "ID",
       field: "id",
+    },
+    {
+      title: "Holidays",
+      // field: "observer",
+      render: ({ holiday_id }) => {
+        if (!holiday_id) return null;
+        const { weekly, occasional, individual } = holiday_id;
+        return (
+          <div>
+            {(weekly?.length && (
+              <div className="flex items-center gap-3">
+                <b>Weekly : </b>
+                {weekly?.map((item) => zeroSixByDaysName(item)).join(", ")}
+              </div>
+            )) ||
+              ""}
+            {(occasional?.length && (
+              <div>
+                <b>Occasional : </b>
+                {occasional?.map?.((item) => item).join(", ")}
+              </div>
+            )) ||
+              ""}
+            {/* 
+            {(individual?.length && <div>{individual}</div>) || ""} */}
+          </div>
+        );
+      },
     },
     {
       title: "Observer",

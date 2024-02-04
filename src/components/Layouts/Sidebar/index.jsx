@@ -80,6 +80,7 @@ export default function () {
     ],
   };
   const holiday = {
+    isAuthorized: true,
     title: "Holiday",
     Icon: BellSlashIcon,
     // href: HOLIDAY_PATH,

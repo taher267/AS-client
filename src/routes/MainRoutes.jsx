@@ -102,7 +102,6 @@ const MainRoutes = {
       path: `${ESTABLISHMENT_PATH}${NEW_PATH}`,
       element: <NewEstablishment />,
     },
-
     {
       path: DEPARTMENT_PATH,
       element: <Department />,

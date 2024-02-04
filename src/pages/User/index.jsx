@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { axiosPrivate } from "../../api/axios";
 import Table from "../../components/Table";
 import ReactSelect from "react-select";
-import { USER_STATUSES } from "../../config";
+import { UPDATABLE_ROLES, USER_STATUSES } from "../../config";
 import LoadingIcon from "../../Icons/LoadingIcon";
 import Pagination from "../../components/Pagination";
 
@@ -72,6 +72,7 @@ const User = () => {
       setDeleting(false);
     }
   };
+
   const updateItemWithPatch = async ({ updateData = {}, id }) => {
     try {
       setEditId(id);
@@ -120,6 +121,23 @@ const User = () => {
           field: "name",
         },
         {
+          title: "Profile Pic",
+          field: "profilePic",
+          render: ({ profilePic, name }) => (
+            <div className="text-center">
+              {profilePic ? (
+                <img
+                  src={profilePic}
+                  alt={name}
+                  className="w-[32px] rounded-[50%] mx-auto"
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          ),
+        },
+        {
           title: "Email",
           field: "email",
         },
@@ -132,21 +150,38 @@ const User = () => {
           field: "phone_number",
         },
         {
-          title: "Profile Pic",
-          field: "profilePic",
-          render: ({ profilePic, name }) => (
-            <div>
-              {profilePic ? (
-                <img
-                  src={profilePic}
-                  alt={name}
-                  className="w-[32px] rounded-[50%]"
+          title: "Roles",
+          field: "status",
+          render: ({ roles }) => {
+            const options = UPDATABLE_ROLES.map((sts) => ({
+              value: sts,
+              label: sts,
+            }));
+            const defVals = roles?.length
+              ? options.filter((item) => roles.includes(item.value))
+              : [];
+            return (
+              <div className="flex items-center gap-2 md:w-[50%] md:inline-block sm:inline-block sm:w-[50%] lg:block lg:w-full md:mr-2 sm:mr-2">
+                <ReactSelect
+                  className="w-full"
+                  isMulti
+                  isDisabled={Boolean(editId)}
+                  defaultValue={defVals}
+                  options={options}
+                  onChange={(changed) => {
+                   console.log(changed)
+                    // const requestObj = {
+                    //   updateData: { status: changed.value },
+                    //   id,
+                    // };
+                    // updateItemWithPatch(requestObj);
+                  }}
                 />
-              ) : (
-                ""
-              )}
-            </div>
-          ),
+                {/* 
+                {(editLoading && editId === id && <LoadingIcon />) || ""} */}
+              </div>
+            );
+          },
         },
         {
           title: "Status",
@@ -157,8 +192,9 @@ const User = () => {
               label: sts,
             }));
             return (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 md:w-[50%] md:inline-block sm:inline-block sm:w-[50%] lg:block lg:w-full">
                 <ReactSelect
+                  className="w-full"
                   isDisabled={Boolean(editId)}
                   defaultValue={{ value: status, label: status }}
                   options={options}
@@ -187,6 +223,7 @@ const User = () => {
       ],
     };
   }, [editId]);
+
   const handlePage = (_page) => {
     setPage(_page);
   };
