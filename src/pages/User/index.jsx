@@ -7,13 +7,17 @@ import ReactSelect from "react-select";
 import { UPDATABLE_ROLES, USER_STATUSES } from "../../config";
 import LoadingIcon from "../../Icons/LoadingIcon";
 import Pagination from "../../components/Pagination";
+import Button from "../../components/UI/Button";
+import SaveIcon from "../../Icons/SaveIcon";
 
 const User = () => {
   const { manageAccessToken } = useAuth();
   const [allUsers, setAllUsers] = React.useState({});
   const [deleting, setDeleting] = React.useState(false);
+  const [editRoles, setEditRoles] = React.useState(null);
   const [editLoading, setEditLoading] = React.useState(false);
   const [editId, setEditId] = React.useState(null);
+  const [editId2, setEditId2] = React.useState(null);
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
@@ -73,10 +77,15 @@ const User = () => {
     }
   };
 
-  const updateItemWithPatch = async ({ updateData = {}, id }) => {
+  const updateItemWithPatch = async ({
+    updateData = {},
+    id,
+    updateOn = "status",
+  }) => {
     try {
-      setEditId(id);
-
+      if (updateOn === "status") {
+        setEditId(id);
+      }
       if (!id || !Object.keys(updateData || {}).length) {
         console.log(editId, updateData);
         toast.error(`Update data missing!`);
@@ -106,7 +115,11 @@ const User = () => {
       toast.error(msg, { duration: 2000 });
       console.log(e);
     } finally {
-      setEditId(null);
+      if (updateOn === "status") {
+        setEditId(null);
+      } else if (updateOn === "roles") {
+        setEditId2(null);
+      }
       setEditLoading(false);
     }
   };
@@ -152,7 +165,7 @@ const User = () => {
         {
           title: "Roles",
           field: "status",
-          render: ({ roles }) => {
+          render: ({ roles, id }) => {
             const options = UPDATABLE_ROLES.map((sts) => ({
               value: sts,
               label: sts,
@@ -161,24 +174,36 @@ const User = () => {
               ? options.filter((item) => roles.includes(item.value))
               : [];
             return (
-              <div className="flex items-center gap-2 md:w-[50%] md:inline-block sm:inline-block sm:w-[50%] lg:block lg:w-full md:mr-2 sm:mr-2">
+              <div className="lg:flex items-center gap-2 md:w-[50%] md:inline-block sm:inline-block sm:w-[50%] lg:w-full md:mr-2 sm:mr-2">
                 <ReactSelect
                   className="w-full"
                   isMulti
                   isDisabled={Boolean(editId)}
                   defaultValue={defVals}
                   options={options}
-                  onChange={(changed) => {
-                   console.log(changed)
-                    // const requestObj = {
-                    //   updateData: { status: changed.value },
-                    //   id,
-                    // };
-                    // updateItemWithPatch(requestObj);
+                  onChange={(changed = []) => {
+                    console.log(changed);
+                    setEditRoles(changed.map((item) => item.value));
+                    setEditId2(id);
                   }}
                 />
-                {/* 
-                {(editLoading && editId === id && <LoadingIcon />) || ""} */}
+                <Button
+                  disabled={editRoles && editId2 === id ? false : true}
+                  onClick={() => {
+                    const requestObj = {
+                      updateData: { roles: editRoles },
+                      id,
+                    };
+                    updateItemWithPatch(requestObj);
+                  }}
+                  className="w-[unset] px-2 py-2"
+                >
+                  {editId2 === id && editLoading ? (
+                    <LoadingIcon />
+                  ) : (
+                    <SaveIcon />
+                  )}
+                </Button>
               </div>
             );
           },
@@ -222,7 +247,7 @@ const User = () => {
         },
       ],
     };
-  }, [editId]);
+  }, [editId, editId2, editRoles?.length]);
 
   const handlePage = (_page) => {
     setPage(_page);

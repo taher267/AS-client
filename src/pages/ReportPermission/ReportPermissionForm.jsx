@@ -21,7 +21,7 @@ export default function ({
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xl mt-12">
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
@@ -48,7 +48,7 @@ export default function ({
         </div>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
@@ -74,7 +74,7 @@ export default function ({
           </div>
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
@@ -100,7 +100,7 @@ export default function ({
           </div>
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
@@ -126,7 +126,7 @@ export default function ({
           </div>
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
@@ -153,7 +153,7 @@ export default function ({
           </div>
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
@@ -179,7 +179,7 @@ export default function ({
           </div>
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
@@ -203,7 +203,7 @@ export default function ({
           </div>
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-8 mb-3">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
