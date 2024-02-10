@@ -153,7 +153,13 @@ const RHFInput = ({
           fieldState: { error },
           ...rest
         }) => {
-          const { className, style = {} } = restProps;
+          const {
+            className,
+            inputClassName,
+            labelClassName,
+            label,
+            style = {},
+          } = restProps;
           const opts = [];
           const one = options?.[0];
 
@@ -168,7 +174,8 @@ const RHFInput = ({
           }
 
           return (
-            <>
+            <div>
+              <label className={cn(labelClassName)}>{label}</label>
               <ReactSelect
                 isMulti={multiple}
                 {...{ options: opts, ...field, closeMenuOnSelect }}
@@ -183,6 +190,9 @@ const RHFInput = ({
                 }}
                 classNames={{
                   control: (state) => className || "",
+                  input: (state) => {
+                    return `${state} ${inputClassName}`;
+                  },
                 }}
                 defaultValue={
                   defaultValue
@@ -198,7 +208,7 @@ const RHFInput = ({
                 <p className="text-red-500 text-base">{error.message}</p>
               )) ||
                 ""}
-            </>
+            </div>
           );
           // return (
           //   <Select

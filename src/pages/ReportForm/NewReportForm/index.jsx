@@ -129,6 +129,7 @@ const NewReportForm = ({ submitBtnTitle = "Submit" }) => {
               >
                 <RHFInput
                   {...{
+                    className: "mb-3",
                     control,
                     Controller,
                     name: "name",
@@ -142,6 +143,9 @@ const NewReportForm = ({ submitBtnTitle = "Submit" }) => {
                 />
                 <RHFInput
                   {...{
+                    className: "rounded-md",
+                    inputClassName: "h-9",
+                    labelClassName: "font-bold mb-2 block",
                     control,
                     Controller,
                     name: "status",
@@ -157,7 +161,9 @@ const NewReportForm = ({ submitBtnTitle = "Submit" }) => {
                 <div className="">
                   {arrayForm?.map?.((formItem, i) => (
                     <div key={i} className="w-full">
-                      <h5>Item {i + 1}</h5>
+                      <h5 className="my-5 border-b pb-2 font-semibold">
+                        Item {i + 1}
+                      </h5>
                       <div className="block sm:grid grid-cols-2 gap-2">
                         {Object.keys(formItem)?.map?.((keye, j) => {
                           if (keye === "id")
@@ -188,6 +194,13 @@ const NewReportForm = ({ submitBtnTitle = "Submit" }) => {
                                   name: `fields.${i}.${keye}`,
                                   ...InputFieldValidation?.[keye],
                                   onFocus,
+                                  ...(keye === "type"
+                                    ? {
+                                        className: "rounded-md",
+                                        inputClassName: "h-9",
+                                        labelClassName: "font-bold mb-2 block",
+                                      }
+                                    : {}),
                                 }}
                                 className=""
                               />
@@ -207,7 +220,7 @@ const NewReportForm = ({ submitBtnTitle = "Submit" }) => {
                       Object.keys(errors).length > 0
                     }
                     type="submit"
-                    className=""
+                    className="mb-2 sm:mb-0"
                   >
                     {submitBtnTitle}
                   </Button>
