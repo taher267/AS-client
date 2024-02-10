@@ -6,22 +6,47 @@ import React from "react";
 import Sidebar from "../Sidebar";
 import SearchIcon from "../../../Icons/SearchIcon";
 import AnalyticsIcon from "../../../Icons/AnalyticsIcon";
+import LeftArrowCircleIcon from "../../../Icons/LeftArrowCircleIcon";
 
 const AuthLayout = () => {
   const { user } = useAuth();
+  const [showSidebar, setShowSidebar] = React.useState(true);
+  React.useLayoutEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setShowSidebar(false);
+      } else {
+        setShowSidebar(true);
+      }
+    };
 
+    // Attach the event listener when component mounts
+    window.addEventListener("resize", handleResize);
+
+    // Detach the event listener when component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <div className="flex flex-1 bg-gray-50">
-      <div className="hidden md:flex md:w-64 md:flex-col">
+      <div
+        className={cn("md:w-64 transition-all duration-400 ease-out", {
+          //md:flex md:w-64 md:flex-col
+          flex: showSidebar,
+          hidden: !showSidebar,
+        })}
+      >
+        {/* hidden */}
         <div className="flex flex-col flex-grow pt-5 overflow-y-auto bg-white">
-          <div className="flex items-center flex-shrink-0 px-4">
+          {/* <div className="flex items-center flex-shrink-0 px-4">
             <img
               className="w-auto h-8"
               src="https://landingfoliocom.imgix.net/store/collection/clarity-dashboard/images/logo.svg"
               alt=""
             />
-          </div>
-          <div className="px-4 mt-8">
+          </div> */}
+          <div className="px-4 mt-0">
             <label htmlFor="" className="sr-only">
               {" "}
               Search{" "}
@@ -63,7 +88,15 @@ const AuthLayout = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 relative">
+        <span
+          className={`absolute left-[-5px] top-[-5px] text-2xl cursor-pointer transform rotate-${
+            showSidebar ? `0` : "180"
+          }`}
+          onClick={() => setShowSidebar((p) => !p)}
+        >
+          <LeftArrowCircleIcon className={`w-8 h-8`} />
+        </span>
         <main>
           <div className="py-6">
             <div className="px-4 mx-auto max-w-7xl sm:px-6 md:px-8">
