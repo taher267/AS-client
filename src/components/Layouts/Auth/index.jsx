@@ -21,13 +21,13 @@ const AuthLayout = () => {
     };
 
     // Attach the event listener when component mounts
-    window.addEventListener("resize", handleResize);
+    // window.addEventListener("resize", handleResize);
     if (window.innerWidth < 768) {
       setShowSidebar(false);
     }
     // Detach the event listener when component unmounts
     return () => {
-      window.removeEventListener("resize", handleResize);
+      // window.removeEventListener("resize", handleResize);
     };
   }, []);
   return (
