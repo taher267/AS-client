@@ -22,7 +22,7 @@ import TableIcon from "../../../Icons/TableIcon";
 import BellSlashIcon from "../../../Icons/BellSlashIcon";
 import HandRaisedIcon from "../../../Icons/HandRaisedIcon";
 import WindowIcon from "../../../Icons/WindowIcon";
-import BuildingIcon from "../../../Icons/buildingIcon";
+import BuildingIcon from "../../../Icons/BuildingIcon";
 import UsersIcon from "../../../Icons/UsersIcon";
 
 export default function () {
