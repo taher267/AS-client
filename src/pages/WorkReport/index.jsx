@@ -2,17 +2,20 @@
 // import NewInputField from "./NewReportForm/NewInputField";
 
 import React from "react";
-import axios, { axiosPrivate } from "../../api/axios";
+import { axiosPrivate } from "../../api/axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import Table from "../../components/Table";
 import strReplacer from "../../utils/strReplacer";
-import cn from "../../utils/cn";
-import LeftAngleIcon from "../../Icons/LeftAngleIcon";
-import RightAngleIcon from "../../Icons/RightAngleIcon";
-import Button from "../../components/UI/Button";
+// import cn from "../../utils/cn";
+// import LeftAngleIcon from "../../Icons/LeftAngleIcon";
+// import RightAngleIcon from "../../Icons/RightAngleIcon";
+// import Button from "../../components/UI/Button";
 import Pagination from "../../components/Pagination";
+import { WORK_REPORT_STATUSES } from "../../config";
+import ReactSelect from "react-select";
+import LoadingIcon from "../../Icons/LoadingIcon";
 
 const WorkReport = () => {
   const { manageAccessToken } = useAuth();
@@ -21,6 +24,8 @@ const WorkReport = () => {
   const [limit] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
   const [initLoad, setInitLoad] = React.useState(null); //init, up, down
+  const [editLoading, setEditLoading] = React.useState(false);
+  const [editId, setEditId] = React.useState(null);
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -56,6 +61,134 @@ const WorkReport = () => {
   }, [page]);
   const handlePage = (_page) => {
     setPage(_page);
+  };
+  const headers = React.useMemo(() => {
+    return {
+      className:
+        "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
+      items: [
+        {
+          title: "ID",
+          field: "id",
+        },
+        {
+          title: "For submission",
+          field: "for_submission_date",
+        },
+        {
+          title: "On Submission",
+          field: "createdAt",
+        },
+        {
+          title: "Report",
+          field: "fields",
+          render: ({ fields, ...item }) => {
+            // console.log(item);
+            return (
+              <div>
+                {Object.entries(fields).map(([k, v]) => {
+                  return (
+                    <div key={k} className="flex justify-between items-center">
+                      <div className="capitalize">
+                        {strReplacer({
+                          str: k,
+                          replaceBy: " ",
+                          replaceOn: "_",
+                        })}
+                      </div>
+                      <div>{v}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          },
+        },
+        {
+          title: "Status",
+          render: ({ status, id }) => {
+            const options = WORK_REPORT_STATUSES.map((sts) => ({
+              value: sts,
+              label: sts,
+            }));
+            return (
+              <div className="flex items-center gap-2 md:w-[50%] md:inline-block sm:inline-block sm:w-[50%] lg:block lg:w-full relative">
+                <ReactSelect
+                  className="w-full"
+                  isDisabled={Boolean(editId)}
+                  defaultValue={{ value: status, label: status }}
+                  options={options}
+                  onChange={(changed) => {
+                    if (status === changed.value) return;
+                    const requestObj = {
+                      updateData: { status: changed.value },
+                      id,
+                    };
+                    updateItemWithPatch(requestObj);
+                  }}
+                />
+                {(editLoading && editId === id && (
+                  <LoadingIcon className={`absolute top-[35%] left-[45%]`} />
+                )) ||
+                  ""}
+              </div>
+            );
+          },
+        },
+        ,
+        {
+          title: <span className="sr-only">Actions </span>,
+          className: "",
+        },
+      ],
+    };
+  }, [editId]);
+
+  const updateItemWithPatch = async ({
+    updateData = {},
+    id,
+    updateOn = "status",
+  }) => {
+    try {
+      if (updateOn === "status") {
+        setEditId(id);
+      }
+      if (!id || !Object.keys(updateData || {}).length) {
+        console.log(editId, updateData);
+        toast.error(`Update data missing!`);
+        return;
+      }
+
+      setEditLoading(true);
+      const accessToken = await manageAccessToken();
+      const {
+        data: { data: updatedData },
+      } = await axiosPrivate.patch(`work-reports/${id}`, updateData, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setAllUsers((p) => {
+        const copy = JSON.parse(JSON.stringify(p));
+        copy.data = copy.data.map((item) => {
+          if (item.id === updatedData.id) {
+            return updatedData;
+          }
+          return item;
+      });
+        return copy;
+      });
+      toast.success(`User has been updated!`);
+    } catch (e) {
+      let msg = e?.response?.data?.message || e.message;
+      toast.error(msg, { duration: 2000 });
+      console.log(e);
+    } finally {
+      if (updateOn === "status") {
+        setEditId(null);
+      } //else if (updateOn === "roles") {
+      // setEditId2(null);
+      // }
+      setEditLoading(false);
+    }
   };
 
   return (
@@ -153,51 +286,4 @@ const Action = ({ deleteItem, deleting, item }) => {
       </button> */}
     </div>
   );
-};
-const headers = {
-  className:
-    "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
-  items: [
-    {
-      title: "ID",
-      field: "id",
-    },
-    {
-      title: "For submission",
-      field: "for_submission_date",
-    },
-    {
-      title: "On Submission",
-      field: "createdAt",
-    },
-    {
-      title: "Report",
-      field: "fields",
-      render: ({ fields, ...item }) => {
-        // console.log(item);
-        return (
-          <div>
-            {Object.entries(fields).map(([k, v]) => {
-              return (
-                <div key={k} className="flex justify-between items-center">
-                  <div className="capitalize">
-                    {strReplacer({ str: k, replaceBy: " ", replaceOn: "_" })}
-                  </div>
-                  <div>{v}</div>
-                </div>
-              );
-            })}
-          </div>
-        );
-      },
-    },
-    {
-      title: "Status",
-      field: "status",
-    },
-    {
-      title: <span className="sr-only">Actions </span>,
-      className: "",
-    },
-  ],
 };

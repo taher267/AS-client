@@ -42,6 +42,43 @@ const ObserveBy = () => {
     };
   }, []);
 
+  const headers = React.useMemo(() => {
+    return {
+      className:
+        "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
+      items: [
+        {
+          title: "ID",
+          field: "id",
+        },
+        {
+          title: "User",
+          field: "user_id",
+          render: ({ user_id: { name, id, profilePic } }) => (
+            <div className="xs:gap-3 sm:gap-2 items-center sm:flex">
+              <img
+                src={profilePic}
+                alt={name}
+                loading="lazy"
+                style={{ borderRadius: "50%", height: "35px", width: "35px" }}
+              />
+              <div>
+                <h4>{name}</h4>
+                <p className="text-gray-400">{id}</p>
+              </div>
+            </div>
+          ),
+        },
+        //
+
+        {
+          title: <span className="sr-only">Actions </span>,
+          className: "",
+        },
+      ],
+    };
+  }, []);
+
   return (
     <main className="flex flex-col flex-1 ">
       <div className="py-6">
@@ -121,39 +158,4 @@ const Action = ({ deleteItem, deleting, item }) => {
       </button> */}
     </div>
   );
-};
-
-const headers = {
-  className:
-    "py-3.5 px-4 text-left text-xs uppercase tracking-widest font-medium text-gray-500",
-  items: [
-    {
-      title: "ID",
-      field: "id",
-    },
-    {
-      title: "User",
-      field: "user_id",
-      render: ({ user_id: { name, id, profilePic } }) => (
-        <div className="xs:gap-3 sm:gap-2 items-center sm:flex">
-          <img
-            src={profilePic}
-            alt={name}
-            loading="lazy"
-            style={{ borderRadius: "50%", height: "35px", width: "35px" }}
-          />
-          <div>
-            <h4>{name}</h4>
-            <p className="text-gray-400">{id}</p>
-          </div>
-        </div>
-      ),
-    },
-    //
-
-    {
-      title: <span className="sr-only">Actions </span>,
-      className: "",
-    },
-  ],
 };

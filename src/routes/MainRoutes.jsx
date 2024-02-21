@@ -61,7 +61,8 @@ const SingleReportPermissionWorkReport = Loadable(
   lazy(() => import("../pages/WorkReport/SingleReportPermissionWorkReport"))
 );
 const Holiday = Loadable(lazy(() => import("../pages/Holiday")));
-const NewHoliday = Loadable(lazy(() => import("../pages/Holiday/NewHoliday")));
+const NewHoliday = Loadable(lazy(() => import("../pages/Holiday/New")));
+const EditHoliday = Loadable(lazy(() => import("../pages/Holiday/Edit")));
 
 // const NotFound = Loadable(lazy(() => import("../pages/Error/404")));
 // ==============================|| MAIN ROUTING ||============================== //
@@ -166,6 +167,10 @@ const MainRoutes = {
     {
       path: `${HOLIDAY_PATH}${NEW_PATH}`,
       element: <NewHoliday />,
+    },
+    {
+      path: `${HOLIDAY_PATH}/:id/edit`,
+      element: <EditHoliday />,
     },
     {
       path: "/",

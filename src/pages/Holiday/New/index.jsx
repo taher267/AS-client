@@ -1,12 +1,12 @@
 import React from "react";
-import DepartmentForm from "../HolidayForm";
+import HolidayForm from "../HolidayForm";
 import { axiosPrivate } from "../../../api/axios";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { HOLIDAY_PATH } from "../../../config";
 
-const NewDepartment = () => {
+const NewHoliday = () => {
   const { manageAccessToken } = useAuth();
   const [createLoading, setCreateLoading] = React.useState(false);
   const navigate = useNavigate();
@@ -61,19 +61,20 @@ const NewDepartment = () => {
             </div>
             <div className="px-4 mx-auto mt-8 sm:px-6 md:px-8">
               <div className="mt-6">
-                {/* <p className="text-base font-bold text-gray-900">Profile</p> */}
                 <p className="mt-1 text-sm font-medium text-gray-500">
                   Lorem ipsum dolor sit amet, consectetur adipis.
                 </p>
               </div>
-              <DepartmentForm
+              <HolidayForm
                 onSubmit={onSubmit}
                 // holidays={holidays?.data || [{}]}
-                defaultValues={{
-                  // occasional: ["2023-01-19"],
-                  // 2023-12-20T18:09:40.864+00:00
-                  weekly: [0, 1],
-                }}
+                defaultValues={
+                  {
+                    // occasional: ["2023-01-19"],
+                    // 2023-12-20T18:09:40.864+00:00
+                    // weekly: [0, 1],
+                  }
+                }
                 loading={createLoading}
               />
             </div>
@@ -84,4 +85,4 @@ const NewDepartment = () => {
   );
 };
 
-export default NewDepartment;
+export default NewHoliday;

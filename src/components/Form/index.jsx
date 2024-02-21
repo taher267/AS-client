@@ -438,8 +438,7 @@ const Form = () => {
                       htmlFor=""
                       className="block text-sm font-bold text-gray-900 sm:mt-px sm:pt-2"
                     >
-                      {" "}
-                      Profile Photo{" "}
+                      {" "} Profile Photo{" "}
                     </label>
                     <div className="mt-2 sm:mt-0 sm:col-span-2">
                       <div className="flex items-center space-x-6">
@@ -468,8 +467,7 @@ const Form = () => {
                       htmlFor=""
                       className="block text-sm font-bold text-gray-900 sm:mt-px sm:pt-2"
                     >
-                      {" "}
-                      First &amp; Last Name{" "}
+                      {" "} First &amp; Last Name{" "}
                     </label>
                     <div className="mt-2 sm:mt-0 sm:col-span-2">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-5">
@@ -501,8 +499,7 @@ const Form = () => {
                       htmlFor=""
                       className="block text-sm font-bold text-gray-900 sm:mt-px sm:pt-2"
                     >
-                      {" "}
-                      Email Address{" "}
+                      {" "} Email Address{" "}
                     </label>
                     <div className="mt-2 sm:mt-0 sm:col-span-2">
                       <input

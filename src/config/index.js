@@ -23,5 +23,11 @@ export const UPDATABLE_ROLES = [
   ...USER_ROLES,
 ];
 export const USER_STATUSES = ["active", "inactive", "pending", "close"];
+export const WORK_REPORT_STATUSES = [
+  "submited",
+  "on-review",
+  "approved",
+  "rejected",
+];
 
 export const AUTH_PATHS = [SIGNIN_PATH, SIGNIN_PATH];

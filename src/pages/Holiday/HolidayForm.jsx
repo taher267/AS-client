@@ -35,7 +35,7 @@ export default function ({
               {...{ Controller, control, type: "text" }}
               name="name"
               placeholder="Enter name..."
-              // defaultValue={defaultValues["occasional"] || ""}
+              defaultValue={defaultValues["name"] || ""}
             />
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function ({
                 selector: { label: "name", value: "id" },
                 // options: holidays.map((item) => item.name),
                 style: { minHeight: "42px !important" },
-                // defaultValue: defaultValues["weekly"],
+                defaultValue: defaultValues["weekly"] || "",
               }}
               name="weekly"
               type="select"
@@ -101,7 +101,7 @@ export default function ({
               {...{ Controller, control, type: "date" }}
               name="occasional"
               placeholder="Enter Department"
-              // defaultValue={defaultValues["occasional"] || ""}
+              defaultValue={defaultValues["occasional"] || ""}
               multiple
             />
           </div>

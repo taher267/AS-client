@@ -174,9 +174,9 @@ const User = () => {
               ? options.filter((item) => roles.includes(item.value))
               : [];
             return (
-              <div className="lg:flex items-center gap-2 md:w-[50%] md:inline-block sm:inline-block sm:w-[50%] lg:w-full md:mr-2 sm:mr-2">
+              <div className="lg:flex items-center md:w-[50%] md:inline-block sm:inline-block sm:w-[50%] lg:w-full">
                 <ReactSelect
-                  className="w-full"
+                  className="sm:w-full block sm:inline-block md:w-[90%] lg:w-full"
                   isMulti
                   isDisabled={Boolean(editId)}
                   defaultValue={defVals}
@@ -196,7 +196,7 @@ const User = () => {
                     };
                     updateItemWithPatch(requestObj);
                   }}
-                  className="w-[unset] px-2 py-2"
+                  className="w-full mt-2 sm:w-[unset] sm:mt-0 px-2 py-2 mx-1"
                 >
                   {editId2 === id && editLoading ? (
                     <LoadingIcon />
