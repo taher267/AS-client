@@ -16,7 +16,7 @@ export default function ({
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xl mt-12">
-      <div className="space-y-8">
+      <div className="space-y-8 mb-2">
         <div className="sm:grid sm:grid-cols-3 sm:gap-5 sm:items-start">
           <label
             htmlFor=""
