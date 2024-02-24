@@ -51,13 +51,27 @@ const NewDepartment = () => {
       }
     })();
   }, []);
-
+  const ids_field = [
+    "department_id",
+    "establishment_id",
+    "holiday_id",
+    "observer_id",
+    "report_form_id",
+    "user_id",
+  ];
   const onSubmit = async (formData) => {
     try {
       setCreateLoading(true);
       const accessToken = await manageAccessToken();
       const copy = JSON.parse(JSON.stringify(formData));
       copy.open_submission_date = `${copy.open_submission_date}T00:05:00.000+00:00`;
+      for (const key of ids_field) {
+        const val = copy[key];
+        if (val) {
+          copy[key] = val.id;
+        }
+      }
+
       const { data } = await axiosPrivate.post(
         `/report-permissions`,
         { ...copy },
@@ -99,12 +113,38 @@ const NewDepartment = () => {
               ) : (
                 <ReportPermissionForm
                   onSubmit={onSubmit}
-                  establishments={allEstablishments?.data || []}
-                  departments={allDepartments?.data || []}
-                  holidays={allHolidays?.data || []}
-                  reportForms={allReportForms?.data || []}
-                  users={allUsers?.data || []}
-                  observers={allUsers?.data || []}
+                  establishments={
+                    allEstablishments?.data?.map?.(({ id, name }) => ({
+                      id,
+                      name,
+                    })) || []
+                  }
+                  departments={
+                    allDepartments?.data?.map?.(({ id, name }) => ({
+                      id,
+                      name,
+                    })) || []
+                  }
+                  holidays={
+                    allHolidays?.data?.map?.(({ id, name }) => ({
+                      id,
+                      name,
+                    })) || []
+                  }
+                  reportForms={
+                    allReportForms?.data?.map?.(({ id, name }) => ({
+                      id,
+                      name,
+                    })) || []
+                  }
+                  users={
+                    allUsers?.data?.map?.(({ id, name }) => ({ id, name })) ||
+                    []
+                  }
+                  observers={
+                    allUsers?.data?.map?.(({ id, name }) => ({ id, name })) ||
+                    []
+                  }
                   defaultValues={{
                     status: "open",
                     // open_submission_date: moment().format('YYYY-MM-DD'),
