@@ -94,10 +94,11 @@ export default function () {
       console.log(e);
     } finally {
       if (updateOn === "status") {
-        setEditId(null);
+        // setEditId(null);
       } //else if (updateOn === "roles") {
       // setEditId2(null);
       // }
+      setEditId(null);
       setEditLoading(false);
     }
   };
@@ -158,13 +159,18 @@ export default function () {
                   isDisabled={Boolean(editId)}
                   defaultValue={{ value: status, label: status }}
                   options={options}
-                  onChange={(changed) => {
-                    if (status === changed.value) return;
-                    const requestObj = {
-                      updateData: { status: changed.value },
-                      id,
-                    };
-                    updateItemWithPatch(requestObj);
+                  onChange={(...changed) => {
+                    const changedVal = changed[0].value;
+                    if (status === changedVal) {
+                      // console.log(status, changed.value);
+                    } else {
+                      const requestObj = {
+                        updateData: { status: changedVal },
+                        id,
+                      };
+                      updateItemWithPatch(requestObj);
+                    }
+                    return changed;
                   }}
                 />
                 {(editLoading && editId === id && (
@@ -181,7 +187,7 @@ export default function () {
         },
       ],
     };
-  }, []);
+  }, [editId]);
 
   return (
     <main className="flex flex-col flex-1 ">
